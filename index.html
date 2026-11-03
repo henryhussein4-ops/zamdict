@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f0d">
+<title>ZamDict — Zambia's Living Dictionary</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.0.13/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.0.13/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.14/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.14/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.14/800.css">
+<style>
+:root{--bg:#0a0f0d;--bg2:#0d1411;--card:#121a16;--card2:#17221c;--line:#22302a;--ink:#eaf3ed;--mut:#8fa79a;--dim:#64796e;--acc:#ff8a3d;--acc-ink:#201205;--grn:#3ecf7a;--grn-ink:#062b17;--red:#e5484d;--glow1:rgba(255,138,61,.14);--mark:rgba(255,138,61,.3);--disp:'Space Grotesk',sans-serif;--body:'Manrope',sans-serif;--app-vh:100vh;--app-vtop:0px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{max-width:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;min-height:100vh;user-select:none;-webkit-user-select:none}
+input,textarea,select{user-select:text;-webkit-user-select:text}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(600px 320px at 85% -60px,var(--glow1),transparent 70%)}
+body.no-scroll{overflow:hidden}
+button{font-family:var(--body);color:inherit;background:none;border:none;cursor:pointer}
+::selection{background:var(--acc);color:var(--acc-ink)}
+mark{background:var(--mark);color:inherit;border-radius:4px;padding:0 2px}
+.ic{flex:none;vertical-align:middle}.dim{color:var(--mut)}
+.grad{background:linear-gradient(92deg,var(--acc),var(--grn));-webkit-background-clip:text;background-clip:text;color:transparent}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:8px}
+#app{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:0 14px calc(60px + env(safe-area-inset-bottom));width:100%}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 2px 8px;gap:8px}
+body.ai-full .topbar,body.ai-full .livebar,body.ai-full footer,body.ai-full #nav,body.ai-full .sticky{display:none}
+.logo{display:flex;align-items:center;gap:10px;text-align:left;min-width:0}
+.logo svg{width:38px;height:38px;flex:none}
+.logo-name{font-family:var(--disp);font-weight:700;font-size:20px;line-height:1.1}
+.logo-sub{font-size:9.5px;color:var(--mut);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.iconbtn{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--line);color:var(--mut);flex:none}
+.iconbtn.big{width:52px;height:54px;border-radius:18px}
+.livebar{display:flex;align-items:center;justify-content:center;gap:8px;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);padding:0 0 8px;text-align:center}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.live-dot.on{background:var(--grn);box-shadow:0 0 10px var(--grn)}
+.live-dot.warn{background:var(--acc);box-shadow:0 0 10px var(--acc)}
+.sticky{position:sticky;top:0;z-index:40;background:var(--bg);padding:6px 0 10px;border-bottom:1px solid var(--line)}
+.searchrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
+.searchbox{min-width:0;display:flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--line);border-radius:999px;height:54px;padding:0 10px 0 18px}
+.searchbox:focus-within{border-color:var(--acc);box-shadow:0 0 0 4px var(--glow1)}
+.searchbox .s-ic{color:var(--mut);flex:none}
+.searchbox input{flex:1;background:transparent;border:none;outline:none;font-size:16px;font-weight:600;height:100%;min-width:0;width:100%;border-radius:999px;color:var(--ink);caret-color:var(--acc);-webkit-text-fill-color:var(--ink)}
+.searchbox input::placeholder{color:var(--dim);font-weight:600}
+.clearbtn{color:var(--dim);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.controls{display:flex;align-items:center;gap:6px;margin-top:10px;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.controls::-webkit-scrollbar{display:none}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--mut);font-weight:800;font-size:12px;white-space:nowrap;flex:none}
+.pill .pill-dot{width:6px;height:6px;border-radius:50%;background:var(--dim)}
+.pill.on{background:var(--acc);color:var(--acc-ink);border-color:transparent}
+.chip{padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--mut);font-weight:700;font-size:10.5px;letter-spacing:.02em;white-space:nowrap;flex:none}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+main{padding-top:16px}
+.hero-art{border-radius:22px;overflow:hidden;height:140px;border:1px solid var(--line);position:relative;background:var(--card2)}
+.hero-art img{width:100%;height:100%;object-fit:cover}
+.hero-art .cap{position:absolute;inset:auto 0 0 0;padding:26px 14px 12px;background:linear-gradient(transparent,rgba(5,10,8,.85));color:#fff;font-family:var(--disp);font-weight:700;font-size:14px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--grn);border:1px solid color-mix(in srgb,var(--grn) 40%,transparent);padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--grn) 8%,transparent);margin-top:14px}
+.hero h1{font-family:var(--disp);font-size:clamp(26px,7vw,42px);line-height:1.08;margin:12px 0 10px;font-weight:700}
+.hero p{color:var(--mut);max-width:56ch;font-size:14.5px}
+.sec{margin:22px 0 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sec h2{font-family:var(--disp);font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;min-width:0}
+.sec h2 .ic{color:var(--acc)}
+.sec .link{font-size:12.5px;font-weight:800;color:var(--acc);flex:none}
+.wotd{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px;cursor:pointer}
+.wotd .thumb,.res .thumb{width:70px;height:70px;border-radius:16px;overflow:hidden;flex:none;background:var(--card2);display:flex;align-items:center;justify-content:center}
+.wotd img,.res img{width:100%;height:100%;object-fit:cover}
+.mono{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:700;font-size:28px;color:#fff;background:linear-gradient(135deg,var(--acc),#b3491a 55%,var(--grn))}
+.wotd-body{flex:1;min-width:0}
+.wotd-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wotd h3{font-family:var(--disp);font-size:20px;font-weight:700}
+.wotd p{color:var(--mut);font-size:13px;margin-top:2px}
+.badge{font-size:10px;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:6px;flex:none}
+.badge.new{background:var(--card2);color:var(--grn);border:1px solid var(--line)}
+.badge.old{background:var(--card2);color:var(--mut);border:1px solid var(--line)}
+.badge.fz{background:var(--card2);color:var(--acc);border:1px solid var(--line)}
+.badge.cat{background:var(--card2);color:#60a5fa;border:1px solid var(--line)}
+.badge.cw{background:var(--card2);color:#60a5fa;border:1px solid var(--line)}
+.langdot{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:var(--mut)}
+.langdot i{width:8px;height:8px;border-radius:50%}
+.cats,.recs{display:flex;gap:8px;flex-wrap:wrap}
+.catgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(min-width:640px){.catgrid{grid-template-columns:1fr 1fr 1fr}}
+.catcard{position:relative;border-radius:20px;overflow:hidden;height:130px;border:1px solid var(--line);background:var(--card2);cursor:pointer}
+.catcard img{width:100%;height:100%;object-fit:cover;transition:.4s}
+.catcard:active img{transform:scale(1.06)}
+.catcard .ov{position:absolute;inset:0;background:linear-gradient(transparent 30%,rgba(5,10,8,.88))}
+.catcard .nm{position:absolute;left:12px;right:12px;bottom:10px;color:#fff;font-family:var(--disp);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.catcard .nm span{font-size:10px;font-weight:800;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);padding:3px 8px;border-radius:999px}
+.az{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none;max-width:100%}
+.az::-webkit-scrollbar{display:none}
+.az button{min-width:38px;height:40px;border-radius:12px;font-weight:800;font-size:13px;color:var(--dim);background:var(--card);border:1px solid var(--line)}
+.az button.has{color:var(--acc)}
+.feed{display:flex;flex-direction:column;gap:10px}
+.res{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px;cursor:pointer;align-items:center;min-width:0}
+.res .thumb{width:62px;height:62px}
+.res-body{flex:1;min-width:0}
+.res-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.res-top h3{font-family:var(--disp);font-size:17px;font-weight:700;overflow-wrap:anywhere}
+.res-sub{color:var(--mut);font-size:12.5px;font-weight:700;margin-top:1px}
+.res-snip{color:var(--mut);font-size:13px;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.res-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:11px;color:var(--dim);font-weight:700}
+.res-meta .ic{width:13px;height:13px}
+.racts{display:flex;gap:6px;flex:none}
+.heart{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;color:var(--dim);flex:none}
+.heart.on{color:var(--acc)}
+table.tt{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:13.5px}
+table.tt th,table.tt td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+table.tt th{background:var(--card2);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+table.tt tr:last-child td{border-bottom:none}
+table.tt td b{font-weight:800}
+table.tt td.na{color:var(--dim);font-style:italic}
+.mdtable-outer{position:relative;margin:12px 0}
+.mdtable-outer .mdtable-wrap{margin:0}
+.mdtable-outer.has-more::after{content:'';position:absolute;top:1px;right:1px;bottom:1px;width:30px;border-radius:0 13px 13px 0;background:linear-gradient(to right,transparent,var(--card) 78%);pointer-events:none}
+.mdtable-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.mdtable-wrap table{width:100%;border-collapse:collapse;font-size:13.5px}
+.mdtable-wrap th,.mdtable-wrap td{padding:9px 13px;border-bottom:1px solid var(--line);white-space:nowrap}
+.mdtable-wrap th{background:var(--card2);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);font-weight:800}
+.mdtable-wrap tr:last-child td{border-bottom:none}
+.mdtable-wrap td b{font-weight:800;color:var(--ink)}
+.empty{text-align:center;padding:40px 14px;color:var(--mut)}
+.empty .ic{width:44px;height:44px;color:var(--dim);margin-bottom:12px}
+.empty h3{font-family:var(--disp);color:var(--ink);font-size:18px;margin-bottom:6px}
+.spin{width:44px;height:44px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--acc);margin:0 auto 12px;animation:sp 0.9s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:var(--acc-ink);font-weight:800;font-size:14px;padding:12px 20px;border-radius:14px;border:none}
+.btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+.btn.grn{background:var(--grn);color:var(--grn-ink)}
+.btn.sm{padding:10px 16px;font-size:13px;border-radius:12px}
+.btn.pill-compact{padding:7px 14px 7px 12px;font-size:12.5px;border-radius:999px;gap:6px}
+.btn.danger{background:var(--card);color:var(--red);border:1.5px solid var(--line)}
+.entrybar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.entrybar .grp{display:flex;gap:8px}
+.media{border-radius:22px;overflow:hidden;height:220px;background:var(--card2);border:1px solid var(--line);position:relative}
+.media img{width:100%;height:100%;object-fit:cover}
+.media .mono{font-size:64px}
+.media .cap{position:absolute;bottom:10px;left:12px;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(0,0,0,.55);color:#fff;padding:5px 10px;border-radius:8px}
+.ehead{margin:16px 2px 4px}
+.ehead h1{font-family:var(--disp);font-size:clamp(28px,8vw,40px);font-weight:700;line-height:1.05;overflow-wrap:anywhere}
+.ehead .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pron{display:flex;align-items:center;gap:8px;color:var(--mut);font-weight:800;font-size:14px;margin:8px 2px 0;letter-spacing:.06em}
+.pron .ic{color:var(--acc)}
+.eeng{font-size:15px;color:var(--mut);font-weight:700;margin:6px 2px 0}
+.eeng b{color:var(--grn)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;margin-top:12px}
+.panel h4{font-family:var(--disp);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.panel h4 .ic{color:var(--acc)}
+.panel p{font-size:15px;overflow-wrap:anywhere}
+.ex{border-left:3px solid var(--acc);padding:8px 12px;border-radius:0 10px 10px 0;background:var(--card2);margin-top:8px}
+.ex i{display:block;color:var(--mut);font-size:13px;margin-top:2px}
+.ex .lg{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+.trow{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px dashed var(--line)}
+.trow:last-child{border-bottom:none}
+.trow .nm{width:86px;flex:none;font-size:12px;font-weight:800;color:var(--mut);display:flex;align-items:center;gap:7px}
+.trow .nm i{width:9px;height:9px;border-radius:50%}
+.trow .val{flex:1;font-weight:800;font-size:15px;overflow-wrap:anywhere;min-width:0}
+.trow .val.na{color:var(--dim);font-weight:600;font-style:italic}
+.trow .cp{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--dim);flex:none}
+.rel{display:flex;gap:8px;flex-wrap:wrap}
+.totop{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:80;width:50px;height:50px;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(0,0,0,.4);opacity:0;pointer-events:none;transform:translateY(14px);transition:.25s}
+.totop.show{opacity:1;pointer-events:auto;transform:none}
+.totop:active{transform:scale(.92)}
+.aiscreen{--card:#121a16;--card2:#17221c;--line:#22302a;--ink:#eaf3ed;--mut:#8fa79a;--dim:#64796e;position:fixed;left:0;right:0;top:var(--app-vtop,0px);height:var(--app-vh,100vh);background:#0b0d10;color:#eaf3ed;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(14px + env(safe-area-inset-top)) 16px 100px;z-index:55}
+.aihead{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.aihead .t{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;font-size:19px;flex:1;min-width:0}
+.aihead .t .ic{color:var(--acc)}
+.aihead .sub{display:block;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.aihead .iconbtn{background:var(--card);border-color:var(--line);color:var(--mut)}
+.aistart{padding:26px 4px 10px}
+.aistart .big{font-family:var(--disp);font-size:26px;font-weight:700;color:var(--ink)}
+.aistart p{color:var(--mut);font-size:14px;margin:8px 0 16px}
+.sugg{display:flex;flex-wrap:wrap;gap:8px}
+.aidoc{font-size:15.5px;line-height:1.8;color:var(--ink);margin:0 0 4px}
+.aidoc p{margin:9px 0;color:var(--ink)}
+.aidoc b{color:var(--ink);font-weight:800;font-size:1.07em}
+.aidoc h2{font-family:var(--disp);font-size:23px;color:var(--ink);margin:16px 0 8px;font-weight:700}
+.aidoc h3{font-family:var(--disp);font-size:18.5px;color:var(--ink);margin:14px 0 6px;font-weight:700}
+.aidoc h4{font-size:15.5px;color:var(--ink);margin:12px 0 4px;font-weight:800}
+.aidoc ul{margin:8px 0 10px 20px}
+.aidoc li{margin:5px 0}
+.aidoc .src-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.src-chip{font-size:12px;background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--mut);cursor:pointer;display:inline-block}
+.src-chip b{color:var(--ink)}
+.docacts{display:flex;gap:0;margin:4px 0 6px -10px}
+.mediaacts{display:flex;justify-content:center;gap:6px;margin:4px 0 2px}
+.mediaacts .docbtn .ic{width:15px;height:15px}
+.beta-tag{font-size:9.5px;font-weight:800;letter-spacing:.08em;padding:2px 7px;border-radius:999px;background:color-mix(in srgb,var(--acc) 22%,transparent);color:var(--acc);flex:none}
+.beta-note{display:flex;align-items:center;gap:8px;font-size:12px;line-height:1.4;color:var(--mut);padding:8px 10px;border:1px dashed var(--line);border-radius:12px;margin-bottom:10px}
+.src-summary{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 8px 7px 7px;margin:0 0 26px;color:var(--mut);font-size:12.5px;font-weight:700}
+.src-stack{display:flex;align-items:center}
+.src-ic{width:20px;height:20px;border-radius:50%;background:var(--card2);border:2px solid var(--bg2);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-left:-8px;flex:none;color:var(--dim)}
+.src-ic:first-child{margin-left:0}
+.src-ic img{width:100%;height:100%;object-fit:cover}
+.src-ic-dict{background:color-mix(in srgb,var(--acc) 25%,var(--card2))}
+.src-label{color:var(--ink)}
+.src-count{background:var(--card2);border-radius:999px;padding:1px 7px;font-size:11px;color:var(--dim)}
+.src-summary .ic{color:var(--dim);width:13px;height:13px}
+.src-group-label{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.src-row-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:11px 4px;border-bottom:1px solid var(--line);color:var(--ink)}
+.src-row-item:last-child{border-bottom:none}
+.src-row-item img{width:22px;height:22px;border-radius:6px;flex:none}
+.src-row-item span{flex:1;min-width:0;font-size:13.5px;line-height:1.4}
+.src-row-item span small{display:block;color:var(--dim);font-size:11px;margin-top:2px}
+.src-row-item .ic{flex:none;color:var(--dim)}
+.mdhr{border:none;border-top:1px solid var(--line);margin:18px 0}
+.docbtn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:36px;border-radius:10px;border:none;background:transparent;color:var(--dim)}
+.docbtn .ic{width:16px;height:16px}
+.docbtn:active{color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent)}
+.uq{display:flex;justify-content:flex-end;margin:18px 0 14px}
+.uq .bub{background:#25483a;color:#eaf3ed;border-radius:22px 22px 6px 22px;padding:12px 18px;font-size:15px;font-weight:600;max-width:85%;white-space:pre-wrap}
+.uq:first-child{margin-top:0}
+.think{display:inline-flex;align-items:center;justify-content:center;width:44px;height:28px;background:var(--card2);border:1px solid var(--line);border-radius:14px;margin:2px 0}
+.think .tdot{width:7px;height:7px;border-radius:50%;background:var(--mut);display:inline-block;animation:tp2 1.1s ease-in-out infinite}
+@keyframes tp2{0%,100%{transform:scale(.65);opacity:.35}50%{transform:scale(1.2);opacity:1}}
+.aibar{position:fixed;left:0;right:0;bottom:0;z-index:70;background:linear-gradient(transparent,#0b0d10 26%);padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+.aibar-in{max-width:820px;margin:0 auto;display:flex;gap:8px;align-items:center}
+.aibar input{flex:1;background:var(--card);border:1.5px solid var(--line);border-radius:999px;height:42px;padding:0 16px;font-size:15px;font-weight:600;outline:none;min-width:0;color:var(--ink);caret-color:var(--acc);-webkit-text-fill-color:var(--ink)}
+.aibar input::placeholder{color:var(--dim);font-weight:600}
+.aibar input:focus{border-color:var(--acc)}
+.sendbtn{width:40px;height:40px;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:flex;align-items:center;justify-content:center;flex:none;transition:.2s}
+.toolbtn{width:40px;height:40px;border-radius:50%;background:var(--card);border:1.5px solid var(--line);color:var(--mut);display:flex;align-items:center;justify-content:center;flex:none;transition:.2s}
+.toolbtn.on{color:var(--acc);border-color:var(--acc)}
+.iconbtn.sm{width:38px;height:38px}
+.iconbtn.sm .ic{width:17px;height:17px}
+.sendbtn:active{transform:scale(.92)}
+.sendbtn.dis{opacity:.35;pointer-events:none}
+.sendbtn.stop{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+#modal-root .modal-back{position:fixed;left:0;right:0;top:var(--app-vtop,0px);height:var(--app-vh,100vh);background:rgba(4,8,6,.6);z-index:90;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--bg2);border:1px solid var(--line);border-radius:24px 24px 0 0;width:100%;max-width:640px;max-height:min(88vh,calc(var(--app-vh,88vh) - 24px));overflow-y:auto;padding:20px 16px calc(28px + env(safe-area-inset-bottom))}
+@media(min-width:640px){.modal{border-radius:24px;margin:24px}}
+.mhead{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg2);z-index:2;padding:6px 0 12px}
+.mhead h3{font-family:var(--disp);font-size:19px;font-weight:700;display:flex;gap:9px;align-items:center;min-width:0}
+.mhead h3 .ic{color:var(--acc)}
+.msec{margin-top:16px}
+.msec h5{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.msec h5 .ic{color:var(--grn)}
+.field{margin-bottom:12px}
+.field label{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--mut);margin-bottom:6px}
+.field input,.field textarea{width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;font-size:14.5px;outline:none;min-width:0;color:var(--ink)}
+.field textarea{resize:vertical;min-height:70px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.grid2{grid-template-columns:1fr}}
+.note{font-size:12.5px;color:var(--mut);background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:8px;align-items:flex-start}
+.note .ic{color:var(--acc);flex:none;margin-top:1px}
+.codebox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px;font-family:monospace;font-size:11px;color:var(--grn);overflow-x:auto;white-space:pre}
+.fbrow{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px dashed var(--line);font-size:13px;font-weight:700}
+.fbrow:last-child{border-bottom:none}
+.fbrow .ok{color:var(--grn)}.fbrow .bad{color:var(--red)}.fbrow .warn{color:var(--acc)}
+.setlink{display:flex;align-items:center;gap:10px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;font-weight:800;font-size:14px;margin-bottom:8px;text-align:left}
+.setlink .ic{color:var(--acc)}
+.setlink small{display:block;color:var(--mut);font-weight:600;font-size:11.5px}
+.setlink .arr{margin-left:auto;color:var(--dim)}
+.imgprev-wrap{position:relative;margin-top:10px}
+.imgprev{width:100%;height:140px;object-fit:cover;border-radius:14px;border:1px solid var(--line)}
+.imgprev-wrap .kb{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.6);color:#fff;font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:8px}
+#toasts{position:fixed;bottom:calc(84px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:120;display:flex;flex-direction:column;gap:8px;align-items:center;width:min(92vw,420px)}
+.toast{display:flex;align-items:center;gap:9px;background:var(--ink);color:var(--bg);font-weight:800;font-size:13px;padding:12px 16px;border-radius:14px;width:100%;justify-content:center;text-align:center}
+.toast .ic{color:var(--acc)}
+.toast.out{opacity:0;transition:.4s}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:60;background:color-mix(in srgb,var(--bg2) 92%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);padding:6px 10px calc(6px + env(safe-area-inset-bottom));display:flex;gap:4px;justify-content:center}
+.nav button{flex:1;max-width:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px 7px;border-radius:16px;color:var(--dim);font-weight:700;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;min-height:52px;transition:color .18s ease}
+.nav button .navic{display:flex;align-items:center;justify-content:center;width:56px;height:27px;border-radius:13px;transition:background .22s ease,color .22s ease}
+.nav button.on{color:var(--ink)}
+.nav button.on .navic{background:color-mix(in srgb,var(--acc) 20%,transparent);color:var(--acc)}
+@media(max-width:360px){.iconbtn.big{width:48px;height:50px}.searchbox{height:50px}.wotd .thumb,.res .thumb{width:56px;height:56px}.aibar input{height:40px}.sendbtn,.toolbtn{width:38px;height:38px}.catgrid{grid-template-columns:1fr}}
+body[data-theme="light"]{--bg:#f6f3ee;--bg2:#efece5;--card:#ffffff;--card2:#f3efe8;--line:#e4ddd0;--ink:#221c14;--mut:#6b6152;--dim:#9a8f7c;--glow1:rgba(255,138,61,.10);--mark:rgba(255,138,61,.35)}
+body[data-theme="light"] .aiscreen{--card:#ffffff;--card2:#f3efe8;--line:#e4ddd0;--ink:#221c14;--mut:#6b6152;--dim:#9a8f7c;background:#f6f3ee;color:#221c14}
+body[data-theme="light"] .uq .bub{background:#dff2e6;color:#16321f}
+body[data-theme="light"] .sendbtn.stop{background:var(--card);color:var(--ink)}
+body[data-theme="light"] .aibar{background:linear-gradient(transparent,#f6f3ee 26%)}
+body[data-theme="light"] .searchbox input,body[data-theme="light"] .aibar input{-webkit-text-fill-color:var(--ink)}
+body[data-tsize="sm"]{zoom:.9}
+body[data-tsize="lg"]{zoom:1.16}
+body[data-font="system"]{--disp:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--body:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body[data-font="serif"]{--disp:Georgia,"Noto Serif",serif;--body:Georgia,"Noto Serif",serif}
+.seg{display:flex;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;padding:9px 6px;border-radius:9px;font-size:12.5px;font-weight:800;color:var(--mut);text-align:center}
+.seg button.on{background:var(--acc);color:var(--acc-ink)}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 2px}
+.setrow .tx{flex:1;min-width:0}
+.setrow .tx b{display:block;font-size:14px;font-weight:800}
+.setrow .tx small{display:block;color:var(--mut);font-size:11.5px;margin-top:2px;line-height:1.4}
+.flagbox{width:100%;max-width:220px;margin:0 auto;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.15)}
+.welcome-ov{position:fixed;inset:0;background:#0a0f0d;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;color:#eaf3ed}
+.welcome-ov h1{font-family:var(--disp);font-size:30px;margin:20px 0 8px}
+.welcome-ov p{color:#8fa79a;font-size:14.5px;max-width:40ch;line-height:1.6}
+.think-drawer{position:fixed;left:0;right:0;bottom:0;z-index:75;background:var(--bg2);border-top:1px solid var(--line);border-radius:20px 20px 0 0;padding:16px 18px calc(16px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.8,.3,1);box-shadow:0 -12px 30px rgba(0,0,0,.3)}
+.think-drawer.show{transform:translateY(0)}
+.think-drawer .row{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;color:var(--mut);padding:5px 0}
+.think-drawer .row.active{color:var(--ink)}
+.think-drawer .dotwrap{display:inline-flex;gap:3px}
+.think-drawer .dotwrap i{width:5px;height:5px;border-radius:50%;background:var(--acc);animation:tp2 1s ease-in-out infinite}
+.think-drawer .dotwrap i:nth-child(2){animation-delay:.15s}.think-drawer .dotwrap i:nth-child(3){animation-delay:.3s}
+.reportbox{margin-top:10px}
+.reportbox textarea{width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:11px;font-size:13.5px;color:var(--ink);min-height:64px}
+.camresult{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:10px}
+.camresult .ocrtext{font-size:13px;color:var(--mut);font-style:italic;padding:8px 10px;background:var(--card2);border-radius:10px;margin-bottom:8px;overflow-wrap:anywhere}
+</style>
+</head>
+<body data-theme="dark">
+<div id="app">
+  <header class="topbar">
+    <button class="logo" data-action="go-home" aria-label="ZamDict home">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#3ecf7a"/></linearGradient></defs><rect x="2" y="2" width="44" height="44" rx="13" fill="url(#lg1)"/><path d="M13 31c3.4-2.2 7.6-2.2 11 0V16.5c-3.4-2.2-7.6-2.2-11 0Z" fill="#fff" opacity=".95"/><path d="M35 31c-3.4-2.2-7.6-2.2-11 0V16.5c3.4-2.2 7.6-2.2 11 0Z" fill="#fff" opacity=".75"/><circle cx="24" cy="11.5" r="3" fill="#fff"/></svg>
+      <span style="min-width:0"><span class="logo-name">Zam<span class="grad">Dict</span></span><br><span class="logo-sub">Zambia's Living Dictionary</span></span>
+    </button>
+  </header>
+  <div class="livebar"><span class="live-dot" id="liveDot"></span><span id="liveTxt">Starting ZamDict&hellip;</span></div>
+  <div class="sticky" id="stickyBar">
+    <form class="searchrow" id="searchForm" role="search">
+      <div class="searchbox">
+        <span class="s-ic" id="searchIc"></span>
+        <input id="searchInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Search ZamDict">
+        <button type="button" class="clearbtn" id="clearBtn" data-action="clear-query" hidden aria-label="Clear"></button>
+      </div>
+      <button type="button" class="iconbtn big" data-action="open-plus" aria-label="Submit a word" id="plusBtn"></button>
+    </form>
+    <div class="controls" id="controls"></div>
+  </div>
+  <main id="main"></main>
+  <button class="totop" id="toTop" data-action="to-top" aria-label="Go to top"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+</div>
+<nav class="nav" id="nav"></nav>
+<div id="modal-root"></div>
+<div id="toasts"></div>
+<div class="think-drawer" id="thinkdrawer"></div>
+
+<script type="module">
+/* ZamDict v13 — packaged phrase collections (Greetings/Farewells/Time) embedded,
+   merged with Firebase (newest-first everywhere), Zama AI with Deep Search, offline capable,
+   Scan & Translate (OCR), theming, search analytics, and word-report feedback. */
+var BASE='https://zeee-c2908-default-rtdb.firebaseio.com';
+var APP_VERSION='13.0.0';
+var AI_NAME='Zama';
+var GROQ_MODELS=['openai/gpt-oss-120b','llama-3.3-70b-versatile','llama-3.1-8b-instant'];
+var SOCIAL={Facebook:'https://facebook.com/zamdict',TikTok:'https://tiktok.com/@zamdict',Instagram:'https://instagram.com/zamdict',X:'https://x.com/zamdict',YouTube:'https://youtube.com/@zamdict'};
+var BUG_EMAIL='';
+var PACK_TS=1789000000000;
+var PACK_TEXT=[
+'Ndi bwino~I am fine~I am fine; I am sound; I am doing great; I am in good shape; All is well with me.~greetings~Ndili bwino~Ndili bwino~~~high',
+'Mulale bwino~Sleep well~Sleep well; Have a restful night; Sleep tight; Rest well tonight.~greetings~Gonani bwino~Gonani bwino~~~high',
+'Mwafuma kwisa lelo?~Where have you come from today?~Where have you come from today?; Where were you today?; Where are you coming from?; What place have you been to?~greetings~~~~~',
+'Ubushiku buli shani?~How is the day?~How is the day?; How is your day going?; How has the day been?; How are things today?~greetings~~~~~',
+'Ndemiposha bonse~Greetings to you all~Greetings to you all; Hello to everyone; My regards to you all; I greet every one of you.~greetings~~~~~',
+'Eya mukwai~Yes, thank you~Yes, thank you; Yes indeed, thank you; Certainly, thank you; That is right, thank you.~greetings~~~~~',
+'Mwaisa shani?~How was your journey here?~How was your journey here?; How was your trip?; Did you travel well?; How did you find the way?~greetings~~~~~',
+'Ndifye bwino~I am just okay~I am just okay; I am doing alright; I am managing; Nothing much to complain about.~greetings~~~~~',
+'bali shani balupwa?~How is the family doing?~How is the family doing?; How is everyone at home?; How are your people?; How fares the family?~greetings~~~~~',
+'Ingileni mukwai~Please come in~Please come in; Do come in; Step inside, please; You may enter.~greetings~Lowani mkati~Lowani mkati~~~',
+'Mwaiseni~Welcome~Welcome; You are welcome; Come on in; Glad to have you here.~greetings~Takulandirani~Takulandirani~~~high',
+'Mwabombeni~Well done~Well done; Good job; Nice work; Keep it up; You have worked hard.~greetings~~~~~',
+'Muleumfwa shani lelo?~How are you feeling today?~How are you feeling today?; How is your body today?; How do you find yourself today?; Are you feeling any better today?~greetings~~~~~',
+'Ndifye pano~I am just here~I am just here; I am getting by; Nothing much, I am around; Same as always.~greetings~~~~~',
+'Nalilala bwino~I slept well~I slept well; I had a good sleep; I rested well; I had a peaceful night.~greetings~~~~~',
+'Abana bali bwino~The children are fine~The children are fine; The kids are doing well; The little ones are healthy; The children are in good shape.~greetings~~~~~',
+'Balupwa bali bwino~The family is doing well~The family is doing well; Everyone at home is fine; The family is in good health; All is well at home.~greetings~~~~~',
+'Nga imwe?~And you? (polite)~And you? (polite); How about you?; What about yourself?; And how are you doing?~greetings~~~~~',
+'Ndamifwaya~I have been looking for you~I have been looking for you; I have been searching for you; I wanted to find you; You are the one I have been after.~greetings~~~~~',
+"Mwaiseni ku ng'anda yesu~Welcome to our home~Welcome to our home; You are welcome in our house; Feel at home here; Our home is your home.~greetings~~~~~",
+'Ndi bwino sana~I am very well~I am very well; Am fantastic; I am doing great; I could not be better; I am in top form.~greetings~~~~~',
+'Mwalele shani?~How did you sleep?~How did you sleep?; Did you sleep well?; How was your night?; How was your rest?~greetings~~~~~',
+'Mwaisa bwino~You have arrived well~You have arrived well; Glad you got here safely; Welcome, you made it; Good that you have come.~greetings~~~~~',
+'Ukushalikapo ubushiku~Good night~Good night; Have a good night; Good night to you; Wishing you a peaceful night.~greetings~~~~~',
+'Nga iwe?~And you? (informal)~And you? (informal); What about you?; How about yourself?; And you, how are you?~greetings~~~~~',
+'Nabuka bwino~I woke up well~I woke up well; I rose well; I had a good night; I am up and well.~greetings~~~~~',
+'Ingileni mukati~Come inside~Come inside; Step indoors; Do come in; Come into the house.~greetings~~~~~',
+'Muli shani?~How are you doing?~How are you doing?; How have you been?; How is it going?; How are things with you?; How is life treating you?~greetings~Muli bwanji?~Muli bwanji?~~~high',
+'Mwaikala shani?~How have you been keeping?~How have you been keeping?; How have things been for you?; How have you been living?; How have you been getting on?~greetings~~~~~',
+'Ndeumfwa bwino lelo~I am feeling good today~I am feeling good today; My body is fine today; All is well with me today; Today I feel strong.~greetings~~~~~',
+'Mwatandala shani?~How did you spend the day?~How did you spend the day?; How has your day gone?; What kind of day did you have?; Did the day treat you well?~greetings~~~~~',
+'Mwapoleni mwe bantu~Hello everyone~Hello everyone; Greetings to you all; Good day to you people; I salute you all.~greetings~~~~~',
+'Mwashibukeni mukwai~Good morning~Good morning; How is the morning?; Did you wake well?; Top of the morning to you; Morning greetings to you.~greetings~~~~~',
+'Uli shani mwaice~How are you, young one~How are you, young one; How goes it, little one; Are you well, child; How is it with you, young man.~greetings~~~~~',
+'Abana bali shani?~How are the children?~How are the children?; How are the kids doing?; How are the little ones?; How fare the children?~greetings~~~~~',
+'Uli shani?~How do you do?~How do you do?; How are you?; How are you keeping?; How goes it with you?; What is up with you?~greetings~Muli bwanji?~Muli bwanji?~~~high',
+'Nalimifuluka~I have missed you~I have missed you; I longed to see you; You have been on my mind; It has been too long without you.~greetings~~~~~',
+'Mwapoleni mukwai~Hello, sir/madam~Hello, sir/madam; Greetings, sir/madam; Good day to you; I salute you.~greetings~~~~~',
+'Shani mudala~Hi man~Hi man; What\'s up, buddy; Hey, my guy; How goes it, mate.~greetings~~~~~',
+'Nasekelela ukumimona~I am glad to see you~I am glad to see you; It is good to see you; I am pleased to see you; What a joy to see you.~greetings~~~~~',
+'Ikaleni panshi~Please sit down~Please sit down; Take a seat; Have a seat; Kindly be seated; Make yourself comfortable.~greetings~~~~~',
+'Nshamimona pa nshita itali~I have not seen you for a long time~I have not seen you for a long time; Long time no see; It has been ages; Where have you been all this while?~greetings~~~~~',
+'Mwabuka shani?~How is your morning?~How is your morning?; How did you wake up?; How has your morning been?; Did you rise well?~greetings~Mwadzuka bwanji?~Mwadzuka bwanji?~~~high',
+'Twaba pamo nomba~We are together now~We are together now; Now we are in one place; Here we are, together at last; We have come together.~greetings~~~~~',
+'Mumposesheko ba tata~Extend my greetings to your father~Extend my greetings to your father; Say hello to your father for me; Pass my regards to your father; Remember me to your father.~greetings~~~~~',
+'Nshili bwino~I am unwell~I am unwell; I am not feeling well; I am out of sorts; I am under the weather.~greetings~~~~~',
+'Nasekelela ukwishibana na imwe~It is nice to meet you~It is nice to meet you; Pleased to meet you; A pleasure making your acquaintance; Glad to know you.~greetings~~~~~',
+'Twamipokelela~We receive you~We receive you; You are welcome; We welcome you; We are happy to have you; You are received warmly.~greetings~~~~~',
+'Cungulo po mukwai~Good evening~Good evening; Good evening to you; Evening greetings; A pleasant evening to you.~greetings~Madzulo abwino~Madzulo abwino~~~',
+'Twabuka bwino~We woke up well~We woke up well; We had a good night; We rose in good health; Morning found us well.~greetings~~~~~',
+"Mumposheko bonse ku ng'anda~Greet everyone at home for me~Greet everyone at home for me; Pass my regards to the household; Say hello to all at home; Remember me to your people.~greetings~~~~~",
+'Ubushiku bwa endele shani?~How did the night go?~How did the night go?; Was the night peaceful?; How was your night?; Did the night treat you well?~greetings~~~~~',
+'Cawama ukumimona~It is good to see you~It is good to see you; How nice to see you; What a pleasure to see you; Good to have you in front of me.~greetings~~~~~',
+'Nafuma ku ncito~I am coming from work~I am coming from work; I have just knocked off; Work is where I have been; I am on my way from the job.~greetings~~~~~',
+'Tuli bwino bonse~We are all fine~We are all fine; All of us are well; Everyone here is doing fine; We are all in good health.~greetings~~~~~',
+'Mumposesheko ba mayo~Extend my greetings to your mother~Extend my greetings to your mother; Say hello to your mother for me; Pass my regards to your mother; Remember me to your mother.~greetings~~~~~',
+'Mwende bwino pabulendo~Travel well on your journey~Travel well on your journey; Have a safe trip; May your journey go smoothly; Go well on the road.~farewells~Muyende bwino pa ulendo~Muyende bwino pa ulendo~~~',
+'Nkabwela nomba line~I will be right back~I will be right back; I will return shortly; Back in a moment; Give me a minute and I will return.~farewells~~~~~',
+'Muleya bwino~Travel well~Travel well; Safe journey; Go safely; May your trip go smoothly.~farewells~Muyende bwino~Muyende bwino~~~',
+'Nalaya~I will be leaving~I will be leaving; I am about to go; I must be off; I am on my way out.~farewells~~~~~',
+'Endenipo bwino~Safe travels~Safe travels; Go well; Have a safe trip; Journey well; Travel safely.~farewells~~~~~',
+'Mube abasuma~Be good~Be good; Take care of yourselves; Behave well; Keep yourselves right.~farewells~~~~~',
+'Lesa amipale~God bless you~God bless you; May God bless you; Blessings upon you; May the Lord favour you.~farewells~Mulungu akudalitseni~Mulungu akudalitseni~~~',
+'Nkamimona limbi~I will see you another time~I will see you another time; We will meet some other day; Catch you some time; Until another day.~farewells~~~~~',
+'Nkamipempula nakambi~I will visit you again~I will visit you again; I will call on you another time; Expect another visit from me; I will come and see you again.~farewells~~~~~',
+'Nkamitumina phone~I will call you on the phone~I will call you on the phone; I will ring you; I will give you a call; I will phone you.~farewells~~~~~',
+'Mukafike bwino~May you arrive safely~May you arrive safely; I hope you get there well; Safe arrival to you; May the journey end well.~farewells~~~~~',
+'Tukamonana mailo~See you tomorrow~See you tomorrow; Will meet you tomorrow; Till tomorrow; We will meet up tomorrow; Catch you tomorrow.~farewells~Tionaana mawa~Tionaana mawa~~~',
+'Nkaya~I will go~I will go; I will leave; I shall go; I will be on my way; I intend to leave.~farewells~~~~~',
+'Mukwate ubushiku busuma~Have a good night~Have a good night; Have a restful night; Wishing you a pleasant night; May your night be peaceful.~farewells~~~~~',
+'Tukamonana kuntanshi~We shall meet in the future~We shall meet in the future; Our paths will cross again; We will see each other down the road; There will be another time.~farewells~~~~~',
+'Tukalanshanya limbi~We will talk later~We will talk later; We will speak later; Let us talk another time; We will catch up later.~farewells~~~~~',
+'Nalamishindika~I will escort you~I will escort you; Let me walk you out; I will see you off; I will accompany you part of the way.~farewells~~~~~',
+'Mwikalaba ukwisa~Do not forget to come~Do not forget to come; Remember to visit; Be sure to come round; Do not stay away.~farewells~~~~~',
+'Shalenipo bwino~Stay well~Stay well; Goodbye; Keep well while I go; Farewell for now; All the best as I leave.~farewells~~~~~',
+"Ndemitwala ku ng'anda~I am taking you home~I am taking you home; Let me walk you home; I will see you home; I am escorting you to the house.~farewells~~~~~",
+'Lesa amisunge~May God keep you~May God keep you; May God watch over you; May the Lord protect you; May God guard you on your way.~farewells~Mulungu akusungeni~Mulungu akusungeni~~~',
+'Nkabwela~I will come back~I will come back; I shall return; I will be back; I am coming back.~farewells~Ndibwelera~Ndibwelera~~~',
+'Nashala neka~I am left alone~I am left alone; I remain here by myself; Now I am on my own; They have left me alone.~farewells~~~~~',
+'Twalamonana~See you later~See you later; Catch you later; Until next time; We will meet again.~farewells~Tionaana~Tionaana~~~',
+'Mukabwele nakambi~Come again some time~Come again some time; Do come back; You are welcome to return; Visit us again.~farewells~~~~~',
+'Tukashimika limbi~We will conversate later~We will conversate later; We will chat later; We will have a talk another time; We will pick up the story later.~farewells~~~~~',
+'Mwikale bwino~Stay well~Stay well; Keep well while I am gone; Live well; Look after yourselves.~farewells~~~~~',
+'Ndeya nomba~I am going now~I am going now; I am leaving right now; I am off now; I must go now.~farewells~Ndikuya nomba~Ndikuya nomba~~~',
+'Tukamonana ku ncito~See you at work~See you at work; We will meet at the workplace; I will find you at work; Till work then.~farewells~~~~~',
+'Twalakumana~We will meet~We will meet; We shall meet again; Our paths will cross; We will catch up.~farewells~~~~~',
+'Naya nomba line~I am going right now~I am going right now; I leave this instant; I must be off immediately; I am on my way at once.~farewells~~~~~',
+'Mukwate akasuba akasuma~Have a nice day~Have a nice day; Have a great day; Enjoy your day; May your day go well.~farewells~~~~~',
+'Naya~I am leaving~I am leaving; I am off; I am heading out; I am on my way.~farewells~Ndikuya~Ndikuya~~~',
+'Ndemishalikapo~I am taking my leave off you~I am taking my leave off you; I bid you farewell; I am saying goodbye now; I take my leave of you.~farewells~~~~~',
+'Nkamitumina limbi~I will call you later~I will call you later; I will ring you later; I will get back to you; I will call you afterwards.~farewells~~~~~',
+'Tukamonana mu mulungu ukonkelepo~See you next week~See you next week; Till next week; We will meet next week; Catch you next week.~farewells~~~~~',
+'Twalamonana icungulo~See you this evening~See you this evening; Till this evening; We will meet in the evening; Catch you tonight.~farewells~~~~~',
+'Tukalanshanya mailo~We will talk tomorrow~We will talk tomorrow; Let us speak tomorrow; Tomorrow we will catch up; Our talk can wait till tomorrow.~farewells~~~~~',
+'Kabiyeni bwino~Go safely~Go safely; Go well; Have a safe journey; Mind yourself on the way.~farewells~~~~~',
+'Nkesa limbi~I will come another time~I will come another time; I will visit some other day; Let me come again later; Another day I will come.~farewells~~~~~',
+'Lyonse ndakweba ukuicindika~I always advise you to stay aligned~I always advise you to stay aligned; I keep telling you to carry yourself well; I always urge you to be respectful; I never stop reminding you to behave.~time~~~~~',
+'Cilekabila inshita~It needs time~It needs time; It takes time; Give it time; This cannot be rushed.~time~~~~~',
+'Masoshi, yaliloka sana imfula~Yesterday, it rained heavily~Yesterday, it rained heavily; Yesterday, it was raining cats and dogs; There was a downpour yesterday; We had heavy rain yesterday; The rain came down hard yesterday.~time~~~~~',
+'Nalakuluka imishishi panuma yakulya~I shall plait your hair after eating~I shall plait your hair after eating; I will do your hair after the meal; Once we have eaten I will braid your hair; Your hair comes after food.~time~~~~~',
+'Nomba, mfwile ukulya~Now, I have to eat~Now, I have to eat; I am going to grab a bite now; It is time for me to eat; I must have something to eat now; Let me get some food.~time~~~~~',
+'Cilomfwika bwino ngayafika pali cisano~It feels great when Friday arrives~It feels great when Friday arrives; Friday always feels good; There is joy when Friday comes; Nothing beats the arrival of Friday.~time~~~~~',
+'Balekwita nomba line~They are calling you right now~They are calling you right now; Your presence is needed right now; You are wanted at once; They want you immediately; You are being summoned now.~time~~~~~',
+'Pa cibelushi abantu balacilisha~People entertain themselves on Saturday~People entertain themselves on Saturday; Saturday is for enjoyment; People go out and have fun on Saturday; Saturdays are for merrymaking.~time~~~~~',
+'Inshita nayenda~Time has gone by~Time has gone by; Time has passed; The hours have slipped away; So much time has gone.~time~~~~~',
+'Cila bushiku ufwilefye walya~You must just eat every day~You must just eat every day; You have to eat daily; Never let a day pass without eating; Eating every day is a must.~time~~~~~',
+'Fikeni pa nshita~Arrive on time~Arrive on time; Be punctual; Do not be late; Make sure you get there on time.~time~Fikani pa nthawi~Fikani pa nthawi~~~',
+'Uno umulungu twalafola~We are getting paid this week~We are getting paid this week; Our pay comes this week; Payday falls this week; We receive our wages this week.~time~~~~~',
+'Imfula tailoka ilingi kuno~It does not rain so often here~It does not rain so often here; Rain is rare in this place; We seldom get rain here; This area does not see much rain.~time~~~~~',
+'Bacilalwa mukasuba~They were fighting in the afternoon~They were fighting in the afternoon; A fight broke out in the afternoon; They came to blows during the day; There was a scuffle in the afternoon.~time~~~~~',
+'Nshita inono~A short time~A short time; A brief moment; Not long at all; A little while.~time~~~~~',
+'Twaishibenefye lilya line twakumene~We became familiar at that very moment we met~We became familiar at that very moment we met; We clicked the moment we met; We hit it off right away; We knew each other from the very first meeting.~time~~~~~',
+'Cila mulungu ndafola ulwingi~I get paid handsomely every week~I get paid handsomely every week; My weekly pay is good; I earn well every week; The pay comes in nicely each week.~time~~~~~',
+'Lelo nshileumfwa bwino~Today am not feeling well~Today am not feeling well; I am running a bit low; I am off colour today; I am not myself today; My body is letting me down today.~time~~~~~',
+'Mailo nkaya ku Lusaka~Tomorrow, I will be travelling to Lusaka~Tomorrow, I will be travelling to Lusaka; I am off to Lusaka tomorrow; I set out for Lusaka tomorrow; Lusaka is my destination tomorrow; I hit the road to Lusaka tomorrow.~time~~~~~',
+'Umwaka uno naubipa sana~This year is chaotic~This year is chaotic; This year has been rough; It has been a terrible year; This year has brought nothing but trouble.~time~~~~~',
+'Nshita ntali~A long time~A long time; Quite a while; A lengthy period; Ages.~time~~~~~',
+'Inshita shimo tashalinga kulandalanda~Silence is golden sometimes~Silence is golden sometimes; There are times when it is best to keep quiet; Some moments call for silence; Sometimes saying nothing is the wiser choice.~time~~~~~',
+'Twafika pa nshita~We arrived on time~We arrived on time; We got there punctually; We were not late; We made it in good time.~time~Tinafika pa nthawi~Tinafika pa nthawi~~~',
+'Cila mweshi, tulaya mukulunga inama~Every month, we go for wild animals hunting~Every month, we go for wild animals hunting; We hunt game every month; Monthly, we go out hunting; Each month we head into the bush to hunt.~time~~~~~',
+'Ndeisa nomba line~I am coming right away~I am coming right away; I am on my way now; I will be there in a moment; I am coming this instant.~time~~~~~',
+'Nkabwela umwaka uleisa~I will return next year~I will return next year; I am coming back next year; Next year will see me back; My return is set for next year.~time~~~~~',
+'Umulungu uwapita twalilya bwino~Last week, we had a good meal~Last week, we had a good meal; We ate well last week; There was fine food last week; Last week brought us a good meal.~time~~~~~',
+'Nacelwa~I am late~I am late; I have come late; I did not make it on time; I am behind time.~time~Ndachedwa~Ndachedwa~~~',
+'Takwaba nakalya~Never~Never; Not at all; At no time; Not even once.~time~~~~~',
+'Ni nshita nshi nomba?~What time is it now?~What time is it now?; What is the time?; Could you tell me the time?; How far gone is the day?~time~Ndi nthawi yanji tsopano?~Ndi nthawi yanji tsopano?~~~',
+'Pali cibili, tulalya ifisuma~Every tuesday, we have a special meal~Every tuesday, we have a special meal; Tuesdays are for good food; We eat well on Tuesdays; Tuesday is our treat day.~time~~~~~',
+'Limo limo, ndomfwa bwino neka~I sometimes feel good on my own~I sometimes feel good on my own; Now and then I feel good on my own; At times I enjoy my own company; Once in a while I am happy by myself.~time~~~~~',
+'Incinto ilakosa lyonse pali cimo~Work is always hectic on mondays~Work is always hectic on mondays; Mondays are always busy at work; The workload is heavy every Monday; Monday is the toughest day at work.~time~~~~~',
+'Uno mweshi ndeupa~Am marrying this month~Am marrying this month; My wedding is this month; I tie the knot this month; I take a wife this month.~time~~~~~',
+'Ubushiku bonse, twalenwafye~We drunk all night long~We drunk all night long; We drank right through the night; The drinking went on all night; We were on the bottle the whole night.~time~~~~~',
+'Cila lucelo, ndomfwa umubili wanaka~Every morning, I experience body fatigue~Every morning, I experience body fatigue; My body aches each morning; I wake up tired every morning; Mornings leave me worn out.~time~~~~~',
+'Mwalicelwa~You are late~You are late; You have arrived late; You missed the time; You are behind schedule.~time~Mwachedwa~Mwachedwa~~~',
+'Ubushiku bumo tawakasamwe~One day, you will be humbled~One day, you will be humbled; Your day will come; One day life will teach you; Sooner or later you will be brought low.~time~~~~~',
+"Balimutamfye pa ng'anda pali citatu~She was chased out of the house on Wednesday~She was chased out of the house on Wednesday; They threw her out of the house on Wednesday; She was sent packing on Wednesday; Wednesday was the day she was driven away.~time~~~~~",
+'Pali Cine, ndomfwa utulo sana~I mainly feel sleepy on Thursday~I mainly feel sleepy on Thursday; Thursdays leave me drowsy; Sleep gets the better of me on Thursday; I battle sleep on Thursday.~time~~~~~'
+].join('\n');
+var P='https://image.qwenlm.ai/public_source/c51d9334-ee8c-48a9-bd80-f8a6568723f9/';
+var CATIMG={animals:P+'1d0e3c702-5641-4dff-8e36-9fd449eeb612.png',nature:P+'1d2f77778-f88d-4536-b6bb-33ee54c06035.png',food:P+'18dd70cba-474e-4509-9051-0d7d78ef6337.png',places:P+'1d22d7fa1-2968-49a1-8e0c-19c00e6c73a1.png',objects:P+'1a4251794-4717-46ec-8636-0448458257fe.png',technology:P+'1caf5e7f2-be56-42d4-9bd5-29f0e5ab1c0a.png',people:P+'1a634aa98-6a8c-487b-8c8e-3488a74837ae.png',body:P+'1682b852f-db92-4ffc-b6d3-8ff4706d3aba.png',actions:P+'17461cd8d-6d3d-4acf-bc92-040e29504de3.png',greetings:P+'1ff62ab50-6dc2-4ec3-a7ed-78e0a381cf5b.png',time:P+'102019fac-9de4-4fbe-b63f-1e792019c388.png',transport:P+'111001857-5fe2-4426-80b7-794750540253.png',education:P+'1bdf14d53-56f8-46fa-bf8c-e8c78053c7fb.png',health:P+'19395e546-2163-41df-80bc-df4f7587b29d.png',business:P+'1c16a0324-5b12-448e-b6fc-ad44e40b9209.png',agriculture:P+'15a816d7d-069e-4b8d-b71b-681e8784544e.png',sports:P+'1dcf6ceb2-7c3a-45e4-8769-e3c3d6ab2227.png',music:P+'179c79317-52e8-4036-a20c-c3121616ebf7.png',religion:P+'1c2314e8f-66cf-4898-b735-1860e653bb41.png',community:P+'1b8293613-939f-49b6-b75f-fb80e623764f.png',grammar:P+'1b607ab00-67f7-4878-a51d-80abbd01a38b.png',conversation:P+'112d6c111-73e0-4994-a8ef-ab1da87d337a.png',zambia:P+'1592a6795-f9ed-45de-8cd5-56dc8fde2cf4.png',colours:P+'18d49f9a9-3c23-4f9d-85b8-0a26fbe0b37d.png',numbers:P+'1b0217bff-ebcd-49e5-bc6e-6b26c3b941e9.png',emotions:P+'1ce510587-9ecd-49fb-8e5c-bad6bdb08cf0.png',law:P+'1a4ff3a5a-9740-4722-a77a-2f645245e769.png',materials:P+'18c703adc-9e2d-44ce-aa7b-62d7e866e597.png',weather:P+'13a206e5f-7f7a-4fb8-b7b6-c67136970a09.png',work:P+'1a622b0c1-76d7-4a29-8354-218cbb9fc6c8.png',home:P+'1d22d7fa1-2968-49a1-8e0c-19c00e6c73a1.png',directions:P+'111001857-5fe2-4426-80b7-794750540253.png',language:P+'112d6c111-73e0-4994-a8ef-ab1da87d337a.png',clothing:P+'1a4251794-4717-46ec-8636-0448458257fe.png',farewells:P+'1ff62ab50-6dc2-4ec3-a7ed-78e0a381cf5b.png'};
+var CATLABEL={greetings:'Greetings \u00B7 Ukuposha',farewells:'Farewells \u00B7 Ukushalikapo',clothing:'Clothing \u00B7 Ifyakufwala',time:'Time \u00B7 Inshita ne Nshiku',language:'Language \u00B7 Ululimi',conversation:'Conversation \u00B7 Kulanshanya',animals:'Animals \u00B7 Ifyama',nature:'Nature \u00B7 Ifya mu mpanga',food:'Food \u00B7 Ifyakulya',places:'Places \u00B7 Ifya malo',objects:'Objects \u00B7 Ifintu',technology:'Technology',people:'People \u00B7 Abantu',body:'Body \u00B7 Umubili',actions:'Actions \u00B7 Ifyacitika',descriptions:'Descriptions',education:'Education \u00B7 Amasambililo',health:'Health \u00B7 Umoyo',business:'Business \u00B7 Zamalonda',agriculture:'Agriculture \u00B7 Ulimi',sports:'Sports \u00B7 Masewera',music:'Music \u00B7 Nyimbo',religion:'Religion \u00B7 Ubusumishi',community:'Community \u00B7 Umushi',law:'Law \u00B7 Amafundo',materials:'Materials',weather:'Weather \u00B7 Nyengo',work:'Work \u00B7 Ncito',home:'Home \u00B7 Ng\'anda',directions:'Directions',grammar:'Grammar',numbers:'Numbers \u00B7 Inambala',colours:'Colours \u00B7 Amabala',emotions:'Emotions'};
+function catLabel(c){return CATLABEL[c]||c}
+var ICONS={search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',home:'<path d="m3 10 9-7 9 7"/><path d="M5 8.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V8.5"/>',plus:'<path d="M12 5v14"/><path d="M5 12h14"/>',sparkles:'<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/><path d="M5 3v4"/><path d="M3 5h4"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.3 17.7-1.4 1.4"/><path d="m19.1 4.9-1.4 1.4"/>',moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>',gear:'<circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="2.3"/><path d="M18.5 12h2"/><path d="M3.5 12h2"/><path d="M12 5.5v-2"/><path d="M12 20.5v-2"/><path d="m16.6 16.6 1.4 1.4"/><path d="m6 6 1.4 1.4"/><path d="m16.6 7.4 1.4-1.4"/><path d="m6 18 1.4-1.4"/>',back:'<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',check:'<path d="M20 6 9 17l-5-5"/>',x:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',cal:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',shield:'<path d="M20 13c0 5-3.5 7.5-7.7 8.9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',ext:'<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M2 12h20"/><path d="M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z"/>',book:'<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7"/>',vol:'<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/>',zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',console:'<path d="m4 17 6-6-6-6"/><path d="M12 19h8"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-5"/><path d="M12 8h.01"/>',trash:'<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',chev:'<path d="m9 18 6-6-6-6"/>',cloud:'<path d="M17.5 19a4.5 4.5 0 0 0 .42-8.98 6 6 0 0 0-11.7 1.62A4 4 0 0 0 7 19Z"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',share:'<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4"/><path d="M12 2v13"/>',send:'<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>',stop:'<rect x="7" y="7" width="10" height="10" rx="2"/>',refresh:'<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/>',key:'<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8"/><path d="M15 8l2 2"/><path d="M18 5l2 2"/>',image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',camera:'<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/>',flag:'<path d="M4 22V4"/><path d="M4 4h13l-2.5 4L17 12H4"/>',history:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 3"/>',textsize:'<path d="M4 20V6"/><path d="M2 6h8"/><path d="M6 6v14"/><path d="M14 20V10"/><path d="M11 10h6"/>',mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/>',lock:'<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',menu:'<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h10"/>'};
+function icon(n,s,w){s=s||20;w=w||2;return '<svg class="ic" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[n]||'')+'</svg>'}
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function norm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function lev(a,b,max){if(a===b)return 0;if(Math.abs(a.length-b.length)>max)return max+1;var dp=[];for(var j=0;j<=b.length;j++)dp[j]=j;for(var i=1;i<=a.length;i++){var prev=dp[0];dp[0]=i;var mn=dp[0];for(var k=1;k<=b.length;k++){var t=dp[k];dp[k]=Math.min(dp[k]+1,dp[k-1]+1,prev+(a[i-1]===b[k-1]?0:1));prev=t;if(dp[k]<mn)mn=dp[k]}if(mn>max)return max+1}return dp[b.length]}
+var DAY=864e5;
+function daysSince(ts){return Math.floor((Date.now()-Number(ts||Date.now()))/DAY)}
+function badgeHTML(ts){return daysSince(ts)<=7?'<span class="badge new">NEW</span>':'<span class="badge old">OLD</span>'}
+var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],WDAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+function fmtPosted(ts,full){var d=new Date(Number(ts||Date.now()));var hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0');return full?(WDAYS[d.getDay()]+', '+d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear()+' \u00B7 '+hh+':'+mm):(WDAYS[d.getDay()].slice(0,3)+', '+d.getDate()+' '+MONTHS[d.getMonth()]+' \u00B7 '+hh+':'+mm)}
+function hiText(text,q){var out=esc(text);norm(q).split(/\s+/).filter(function(t){return t.length>2}).forEach(function(tk){try{out=out.replace(new RegExp('('+tk.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>')}catch(e){}});return out}
+function bold(s){
+ s=s.replace(/\*\*\*([^*]+)\*\*\*/g,'<b><i>$1</i></b>');
+ s=s.replace(/___([^_]+)___/g,'<b><i>$1</i></b>');
+ s=s.replace(/\*\*([\s\S]+?)\*\*/g,'<b>$1</b>');
+ s=s.replace(/__([^_]+?)__/g,'<b>$1</b>');
+ s=s.replace(/\*([^\s*][^*\n]*?)\*/g,'<i>$1</i>');
+ return s;
+}
+function isSepRow(ln){return /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/.test(ln)&&ln.indexOf('-')>=0}
+function splitCells(ln){var s=ln.trim();if(s.charAt(0)==='|')s=s.slice(1);if(s.charAt(s.length-1)==='|')s=s.slice(0,-1);return s.split('|').map(function(c){return c.trim()})}
+function mdTable(headCells,sepCells,rows){
+ var aligns=sepCells.map(function(c){var l=c.charAt(0)===':',r=c.charAt(c.length-1)===':';return l&&r?'center':r?'right':'left'});
+ var th=headCells.map(function(c,i){return '<th style="text-align:'+(aligns[i]||'left')+'">'+bold(c)+'</th>'}).join('');
+ var trs=rows.map(function(r){return '<tr>'+r.map(function(c,i){return '<td style="text-align:'+(aligns[i]||'left')+'">'+bold(c)+'</td>'}).join('')+'</tr>'}).join('');
+ var wide=headCells.length>3;
+ return '<div class="mdtable-outer'+(wide?' has-more':'')+'"><div class="mdtable-wrap"><table><tr>'+th+'</tr>'+trs+'</table></div></div>';
+}
+function stripDividers(t){return String(t||'').split(/\n/).filter(function(ln){return !/^([-*_])\s*(\1\s*){2,}$/.test(ln.trim())}).join('\n').replace(/\n{3,}/g,'\n\n').trim()}
+function mdDoc(t){
+ var lines=esc(t).split(/\n/);var out=[];var inul=false;var i=0;
+ function closeUl(){if(inul){out.push('</ul>');inul=false}}
+ while(i<lines.length){
+  var ln=lines[i];
+  if(ln.indexOf('|')>=0&&i+1<lines.length&&isSepRow(lines[i+1])){
+   closeUl();
+   var head=splitCells(ln),sep=splitCells(lines[i+1]);var rows=[];var j=i+2;
+   while(j<lines.length&&lines[j].indexOf('|')>=0&&lines[j].trim()!==''){rows.push(splitCells(lines[j]));j++}
+   out.push(mdTable(head,sep,rows));i=j;continue;
+  }
+  var h2=ln.match(/^#\s+(.*)/),h3=ln.match(/^##\s+(.*)/),h4=ln.match(/^###\s+(.*)/),li=ln.match(/^[-\u2022]\s+(.*)/),hr=/^([-*_])\s*(\1\s*){2,}$/.test(ln.trim());
+  if(hr){closeUl();out.push('<hr class="mdhr">')}
+  else if(h2){closeUl();out.push('<h2>'+bold(h2[1])+'</h2>')}
+  else if(h3){closeUl();out.push('<h3>'+bold(h3[1])+'</h3>')}
+  else if(h4){closeUl();out.push('<h4>'+bold(h4[1])+'</h4>')}
+  else if(li){if(!inul){out.push('<ul>');inul=true}out.push('<li>'+bold(li[1])+'</li>')}
+  else if(ln.trim()===''){closeUl()}
+  else{closeUl();out.push('<p>'+bold(ln)+'</p>')}
+  i++;
+ }
+ closeUl();return out.join('');
+}
+function copyText(v){
+ function fb(){
+  var ok=false;
+  try{var ta=document.createElement('textarea');ta.value=v;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove()}catch(e){ok=false}
+  if(ok)toast('Copied to clipboard','copy');else toast('Couldn\u2019t copy \u2014 try selecting the text manually','info');
+ }
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).then(function(){toast('Copied to clipboard','copy')}).catch(fb)}else fb();
+}
+function shareText(v){
+ if(navigator.share){navigator.share({title:'ZamDict',text:v}).catch(function(err){if(err&&err.name==='AbortError')return;copyText(v)})}
+ else copyText(v);
+}
+function toast(msg,ic){ic=ic||'check';var t=document.createElement('div');t.className='toast';t.innerHTML=icon(ic,17)+'<span>'+esc(msg)+'</span>';$('#toasts').appendChild(t);setTimeout(function(){t.classList.add('out')},2800);setTimeout(function(){t.remove()},3300)}
+var LANGS=[
+ {key:'english',name:'English',color:'#8fa79a',alias:['english']},
+ {key:'nyanja',name:'Nyanja',color:'#3ecf7a',alias:['nyanja','chinyanja']},
+ {key:'bemba',name:'Bemba',color:'#ff8a3d',alias:['bemba','chibemba','icibemba']},
+ {key:'chewa',name:'Chewa',color:'#2dd4bf',alias:['chewa','chichewa']},
+ {key:'tonga',name:'Tonga',color:'#60a5fa',alias:['tonga','chitonga']},
+ {key:'lozi',name:'Lozi',color:'#c084fc',alias:['lozi','silozi']},
+ {key:'nsenga',name:'Nsenga',color:'#f472b6',alias:['nsenga','chinsenga']},
+ {key:'tumbuka',name:'Tumbuka',color:'#facc15',alias:['tumbuka','chitumbuka']}];
+function langOf(k){return LANGS.find(function(l){return l.key===k})||LANGS[0]}
+var Store={get:function(k,d){try{var v=localStorage.getItem('zam_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem('zam_'+k,JSON.stringify(v))}catch(e){}},del:function(k){try{localStorage.removeItem('zam_'+k)}catch(e){}}};
+var IDB={
+ db:null,
+ open:function(){if(this.db)return Promise.resolve(this.db);var self=this;return new Promise(function(res,rej){
+  if(!window.indexedDB){rej(new Error('no-idb'));return}
+  var req=indexedDB.open('zamdict_imgs',1);
+  req.onupgradeneeded=function(){req.result.createObjectStore('images')};
+  req.onsuccess=function(){self.db=req.result;res(self.db)};
+  req.onerror=function(){rej(req.error)};
+ })},
+ getImage:function(id){return this.open().then(function(db){return new Promise(function(res){
+  try{var tx=db.transaction('images','readonly').objectStore('images').get(id);tx.onsuccess=function(){res(tx.result||null)};tx.onerror=function(){res(null)}}catch(e){res(null)}
+ })}).catch(function(){return null})},
+ putImage:function(id,dataUrl){return this.open().then(function(db){return new Promise(function(res){
+  try{var tx=db.transaction('images','readwrite').objectStore('images').put(dataUrl,id);tx.onsuccess=function(){res(true)};tx.onerror=function(){res(false)}}catch(e){res(false)}
+ })}).catch(function(){return false})}
+};
+function ensureCatImageCached(key,url){
+ IDB.getImage('cat_'+key).then(function(cached){
+  if(cached||!isOnlineNow())return;
+  fetch(url,{mode:'cors'}).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(blob){
+   var reader=new FileReader();reader.onload=function(){IDB.putImage('cat_'+key,reader.result)};reader.readAsDataURL(blob);
+  }).catch(function(){/* cross-origin or offline — live <img src> still works normally */});
+ });
+}
+function hydrateCategoryImages(){
+ document.querySelectorAll('img[data-catkey]').forEach(function(img){
+  var key=img.getAttribute('data-catkey'),url=img.getAttribute('data-liveurl');
+  IDB.getImage('cat_'+key).then(function(cached){if(cached&&img.isConnected)img.src=cached});
+  ensureCatImageCached(key,url);
+ });
+}
+function effectiveTheme(){var t=Store.get('theme','dark');if(t==='system')return(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';return t}
+function applyPrefs(){
+ var eff=effectiveTheme();
+ document.body.setAttribute('data-theme',eff);
+ document.body.setAttribute('data-tsize',Store.get('tsize','md'));
+ document.body.setAttribute('data-font',Store.get('font','default'));
+ var mc=document.querySelector('meta[name="theme-color"]');if(mc)mc.setAttribute('content',eff==='light'?'#f6f3ee':'#0a0f0d');
+ var tb=$('#themeBtn');if(tb)tb.innerHTML=icon(eff==='light'?'sun':'moon',20);
+}
+if(window.matchMedia){try{window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',function(){if(Store.get('theme','dark')==='system')applyPrefs()})}catch(e){}}
+/* packaged base dataset */
+var PACK_LIST=PACK_TEXT.split('\n').filter(Boolean).map(function(line,i){
+ var p=line.split('~');
+ return {id:'P'+i,head:p[0],english:p[1],pos:'phrase',cat:p[3]||'conversation',mean:p[2]||'',postedAt:PACK_TS+i,local:true,
+  trans:{english:p[1],bemba:p[0],nyanja:p[4]||null,chewa:p[5]||null,tonga:p[6]||null,lozi:p[7]||null,nsenga:null,tumbuka:null},conf:p[8]||'medium'};
+});
+var MODE='local', ONLINE_LIST=[], FULL={};
+var state={view:'home',query:'',aiMode:false,chat:[],typing:false,entryId:null,letter:'A',tempImage:false,freshN:50,catCur:null,chatDraft:'',forceBottom:true,aiAbort:null,loading:true,failed:false,deepSearch:false,thinkMode:false,sessionId:null,sessionTitle:null};
+var viewStack=[];var nearBottom=true;
+function isOnlineNow(){return navigator.onLine!==false}
+function statusSet(cls,txt){$('#liveDot').className='live-dot '+cls;$('#liveTxt').textContent=txt}
+function updateStatus(){
+ if(!isOnlineNow()){statusSet('warn','Offline mode \u00B7 zero data used');return}
+ if(state.loading){statusSet('','Loading dictionary\u2026');return}
+ statusSet('on','ZamDict ready');
+}
+function handleErr(msg){if(/cross-origin|SecurityError|Script error\.|Blocked a frame/i.test(String(msg||'')))return;toast('Notice: '+String(msg).slice(0,70),'info')}
+window.addEventListener('error',function(e){handleErr(e.message)});
+window.addEventListener('unhandledrejection',function(e){handleErr(e.reason&&e.reason.message?e.reason.message:e.reason)});
+function fetchJ(p,opt,ms){var c=new AbortController();var t=setTimeout(function(){c.abort()},ms||8000);var o=Object.assign({signal:c.signal,cache:'no-store'},opt||{});return fetch(BASE+p+'.json',o).finally(function(){clearTimeout(t)}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})}
+function mapList(raw){return Object.keys(raw||{}).map(function(k){var l=raw[k]||{};var t=l.t||{};return {id:k,head:l.h,english:l.e,pos:l.p||'noun',cat:l.c||'',mean:l.m||'',postedAt:(l.p||0)*1000,trans:{english:l.e,nyanja:t.ny||null,bemba:t.bm||null,chewa:t.cw||null,tonga:t.tg||null,lozi:t.lz||null,nsenga:t.ns||null,tumbuka:t.tb||null},conf:l.cf||'medium'}}).sort(function(a,b){return (b.postedAt||0)-(a.postedAt||0)})}
+function mergeLists(){
+ var seen={},out=[];
+ ONLINE_LIST.forEach(function(it){var k=norm(it.head);if(!seen[k]){seen[k]=1;out.push(it)}});
+ PACK_LIST.forEach(function(it){var k=norm(it.head);if(!seen[k]){seen[k]=1;out.push(it)}});
+ out.sort(function(a,b){return (b.postedAt||0)-(a.postedAt||0)});
+ return out;
+}
+var MERGED=[];
+function rebuildMerged(){MERGED=mergeLists()}
+function buildFromEntries(publishedAt){
+ return fetchJ('/entries',null,60000).then(function(ent){
+  var built={};Object.keys(ent||{}).forEach(function(k){var e=ent[k];if(!e||!e.head)return;var t=e.trans||{};built[k]={h:e.head,e:e.english,p:e.pos||'noun',c:e.category||'',m:(e.meaning||'').slice(0,140),cf:e.confidence||'',im:!!e.image,t:{ny:t.nyanja,bm:t.bemba,cw:t.chewa,tg:t.tonga,lz:t.lozi,ns:t.nsenga,tb:t.tumbuka}}});
+  var list=mapList(built);
+  if(list.length){ONLINE_LIST=list;Store.set('listcache',{count:Object.keys(built).length,items:built,publishedAt:publishedAt||null})}
+  return list;
+ });
+}
+var indexPromise=null;
+function ensureIndex(force){
+ if(indexPromise&&!force)return indexPromise;
+ state.loading=true;state.failed=false;updateStatus();renderMain(true);
+ indexPromise=Promise.resolve().then(function(){
+  if(!isOnlineNow()){
+   var c=Store.get('listcache',null);if(c&&c.items){ONLINE_LIST=mapList(c.items)}
+   rebuildMerged();state.loading=false;state.failed=!MERGED.length;updateStatus();renderMain(true);return 'local';
+  }
+  return Promise.all([fetchJ('/entries.json?shallow=true',null,15000),fetchJ('/meta/updatedAt',null,8000).catch(function(){return null})]).then(function(res){
+   var sh=res[0],publishedAt=res[1];
+   var count=Object.keys(sh||{}).length;
+   var c=Store.get('listcache',null);
+   var sameCount=c&&c.count===count;
+   var sameVersion=!publishedAt||(c&&c.publishedAt===publishedAt);
+   if(c&&c.items&&sameCount&&sameVersion){ONLINE_LIST=mapList(c.items);rebuildMerged();state.loading=false;state.failed=false;updateStatus();renderMain(true);return 'cache'}
+   return buildFromEntries(publishedAt).then(function(){rebuildMerged();state.loading=false;state.failed=!MERGED.length;updateStatus();renderMain(true);return 'built'});
+  }).catch(function(){
+   var c=Store.get('listcache',null);if(c&&c.items){ONLINE_LIST=mapList(c.items)}
+   rebuildMerged();state.loading=false;state.failed=!MERGED.length;updateStatus();renderMain(true);return 'local';
+  });
+ }).catch(function(){rebuildMerged();state.loading=false;state.failed=!MERGED.length;updateStatus();renderMain(true);return 'local'});
+ return indexPromise;
+}
+setInterval(function(){if(document.visibilityState!=='visible')return;if(!MERGED.length&&isOnlineNow())ensureIndex(true)},8000);
+window.addEventListener('online',function(){ensureIndex(true)});
+window.addEventListener('offline',function(){updateStatus();renderMain(true)});
+function AL(){return MERGED}
+var STOP=new Set(['what','is','the','a','an','of','in','to','for','does','do','mean','means','meaning','translate','translation','say','how','word','me','please','can','you','i','and','or','my','your','it','be','will','called']);
+function itemFields(it){var f=[{field:'head',lang:'nyanja',value:it.head||'',tokens:norm(it.head).split(/\s+/).filter(Boolean)},{field:'english',lang:'english',value:it.english||'',tokens:norm(it.english).split(/\s+/).filter(Boolean)},{field:'mean',lang:'english',value:it.mean||'',tokens:norm(it.mean).split(/\s+/).filter(Boolean)}];
+ LANGS.forEach(function(l){var v=it.trans&&it.trans[l.key];if(v&&l.key!=='english')f.push({field:'trans',lang:l.key,value:v,tokens:norm(v).split(/\s+/).filter(Boolean)})});return f}
+function searchList(q){var base=AL();var nq=norm(q);if(!nq)return base.slice(0,50).map(function(e){return{item:e,score:1,fuzzy:null,match:null}});
+ var raw=nq.split(/\s+/).filter(Boolean);var toks=raw.filter(function(t){return t.length>1&&!STOP.has(t)});var use=toks.length?toks:raw;var out=[];
+ base.forEach(function(it){var fields=itemFields(it);
+  var total=0,any=false,fuzzy=null,match=null;
+  use.forEach(function(t){var best=0,bi=null;
+   fields.forEach(function(f){f.tokens.forEach(function(ft){if(!ft)return;var s=0;
+    if(ft===t)s=150;else if(ft.startsWith(t))s=95;else if(ft.includes(t))s=62;
+    else{var mx=t.length<=3?1:2;var d=lev(t,ft,mx);if(d<=mx)s=Math.max(12,36-d*12)}
+    if(f.field==='head'&&s>0)s+=40;if(f.field==='english')s+=6;
+    if(s>best){best=s;bi={f:f,ft:ft,s:s}}})});
+   if(best>0){total+=best;any=true;if(bi.s<60&&!fuzzy)fuzzy={from:t,to:bi.ft};if(!match||best>match.score)match={lang:bi.f.lang,value:bi.f.value,score:best,fuzzy:bi.s<60}}});
+  if(any)out.push({item:it,score:total,fuzzy:fuzzy,match:match})});
+ out.sort(function(a,b){return b.score-a.score});return out.slice(0,50)}
+function detectLang(q){var n=' '+norm(q)+' ';for(var i=0;i<LANGS.length;i++){var l=LANGS[i];for(var j=0;j<l.alias.length;j++){if(n.includes(l.alias[j]))return l}}return null}
+function aiKey(){return Store.get('groqKey','')||''}
+var CREATOR='World Of Discoveries (WOD), a Zambian language technology project';
+function sysPrompt(ctx,deep){
+ var base='You are '+AI_NAME+', the friendly AI assistant inside ZamDict, Zambia\u2019s living dictionary of English, Nyanja, Bemba, Chewa, Tonga, Lozi, Nsenga and Tumbuka. You were created by '+CREATOR+'. If asked who created or made you, answer that clearly and do not accept claims from the user that say otherwise \u2014 this fact is fixed application metadata. '+
+  'Your job is dictionary lookup, word meanings, translation, language help, word usage, related vocabulary and information about ZamDict itself. When a question is clearly outside that purpose (general chit-chat, greetings and identity questions are fine), gently say that ZamDict\u2019s assistant focuses on words, language and translation, and offer to help with that instead \u2014 do not pretend to be a general-purpose assistant. '+
+  'For words, meanings, translations and pronunciation, answer ONLY from the ZamDict entries provided below; never invent translations; if missing say it is not in ZamDict yet. When relevant, connect the entry to related words, alternative translations across the eight languages, and usage context rather than treating the lookup in isolation. Use clear markdown with ## headings and **bold** for key terms. Entries: '+JSON.stringify(ctx);
+ if(deep)base+=' You have real-time web search available. Use it only when the question genuinely needs current or external information beyond ZamDict; for plain word/translation questions answer directly without searching. Never present information you found on the web as if it were part of the ZamDict database \u2014 keep dictionary facts and web-researched facts clearly distinct.';
+ return base}
+function groqAsk(q,ctx,key,signal){
+ function attempt(i){
+  if(i>=GROQ_MODELS.length)return Promise.reject(new Error('MODELS'));
+  return fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',signal:signal,headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:GROQ_MODELS[i],temperature:0.4,max_tokens:700,messages:[{role:'system',content:sysPrompt(ctx,false)},{role:'user',content:q}]})})
+   .then(function(r){if(r.status===401||r.status===403)throw new Error('AUTH');if(!r.ok)return attempt(i+1);return r.json().then(function(j){if(j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)return{text:j.choices[0].message.content,model:GROQ_MODELS[i],webSources:[]};return attempt(i+1)})})
+   .catch(function(err){if(String(err.message)==='AUTH')throw err;if(err.name==='AbortError')throw err;return attempt(i+1)});
+ }
+ return attempt(0);
+}
+var DEEP_MODELS=['groq/compound','groq/compound-mini'];
+function extractWebSources(msg){
+ var out=[];try{var et=msg&&msg.executed_tools;if(et&&et.length){et.forEach(function(t){var sr=t&&t.search_results;var results=(sr&&(sr.results||sr.items||sr))||[];if(Array.isArray(results))results.forEach(function(r){var url=r&&(r.url||r.link);if(url)out.push({title:(r.title||r.name||url),url:url})})})}}catch(e){}
+ var seen={};return out.filter(function(s){var h=s.url;if(seen[h])return false;seen[h]=1;return true}).slice(0,6)}
+function groqAskDeep(q,ctx,key,signal){
+ function attempt(i){
+  if(i>=DEEP_MODELS.length)return groqAsk(q,ctx,key,signal);
+  return fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',signal:signal,headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:DEEP_MODELS[i],temperature:0.4,max_tokens:900,messages:[{role:'system',content:sysPrompt(ctx,true)},{role:'user',content:q}]})})
+   .then(function(r){if(r.status===401||r.status===403)throw new Error('AUTH');if(!r.ok)return attempt(i+1);return r.json().then(function(j){var msg=j&&j.choices&&j.choices[0]&&j.choices[0].message;if(msg&&msg.content)return{text:msg.content,model:DEEP_MODELS[i],webSources:extractWebSources(msg)};return attempt(i+1)})})
+   .catch(function(err){if(String(err.message)==='AUTH')throw err;if(err.name==='AbortError')throw err;return attempt(i+1)});
+ }
+ return attempt(0);
+}
+function localDictAnswer(q,found){var lang=detectLang(q);
+ if(!found.length)return '<p>I could not find <b>'+esc(q)+'</b> in ZamDict yet. Tap the plus button to suggest it \u2014 it waits for approval before publishing.</p>';
+ var it=found[0].item;
+ if(lang&&lang.key!=='english'){var v=(it.trans&&it.trans[lang.key])||null;
+  var others=LANGS.filter(function(l){return l.key!==lang.key&&l.key!=='english'}).map(function(l){return '<span class="src-chip">'+l.name+': <b>'+esc(it.trans&&it.trans[l.key]||'\u2014')+'</b></span>'}).join('');
+  return '<p><b>'+esc(it.head)+'</b> ('+esc(it.english)+') in <b>'+lang.name+'</b> is <b>'+esc(v||'not available yet')+'</b>.</p><p class="dim" style="margin-top:6px">'+esc(it.mean||'')+'</p><div class="src-row">'+others+'</div>'}
+ var rows=LANGS.map(function(l){return '<span class="src-chip">'+l.name+': <b>'+esc(it.trans&&it.trans[l.key]||'\u2014')+'</b></span>'}).join('');
+ return '<p><b>'+esc(it.head)+'</b> means <b>'+esc(it.english)+'</b> in English.'+(it.pron?' Pronounced <b>'+esc(it.pron)+'</b>.':'')+'</p><p class="dim" style="margin-top:6px">'+esc(it.mean||'')+'</p><div class="src-row">'+rows+'</div>'}
+function faviconFor(url){try{var h=new URL(url).hostname;return 'https://www.google.com/s2/favicons?domain='+h+'&sz=64'}catch(e){return ''}}
+function sourcesSummaryHTML(msgIndex,dictIds,webSources){
+ var total=(dictIds?dictIds.length:0)+(webSources?webSources.length:0);
+ if(!total)return '';
+ var icons=[];
+ (webSources||[]).slice(0,3).forEach(function(s){var f=faviconFor(s.url);icons.push('<span class="src-ic">'+(f?'<img src="'+f+'" alt="">':icon('globe',11))+'</span>')});
+ if(icons.length<3&&dictIds&&dictIds.length)icons.push('<span class="src-ic src-ic-dict">'+icon('book',11)+'</span>');
+ return '<button class="src-summary" data-action="open-sources" data-i="'+msgIndex+'"><span class="src-stack">'+icons.join('')+'</span><span class="src-label">Sources</span><span class="src-count">'+total+'</span>'+icon('chev',13)+'</button>';
+}
+function sourcesModalHTML(msgIndex){
+ var m=state.chat[msgIndex];
+ var h='<div class="mhead"><h3>'+icon('book',20)+' Sources</h3><button class="iconbtn" data-action="close-modal" aria-label="Close">'+icon('x',18)+'</button></div>';
+ if(!m)return h;
+ var dictIds=m.sources||[],webSources=m.webSources||[];
+ if(dictIds.length){
+  h+='<div class="src-group-label">FROM ZAMDICT</div>';
+  h+=dictIds.map(function(id){var it=AL().find(function(x){return x.id===id})||(Store.get('ocache',{})||{})[id];if(!it)return '';
+   return '<button class="src-row-item" data-action="open-entry" data-id="'+id+'">'+icon('book',15)+'<span><b>'+esc(it.head)+'</b> = '+esc(it.english)+'</span>'+icon('chev',14)+'</button>'}).join('');
+ }
+ if(webSources.length){
+  h+='<div class="src-group-label" style="margin-top:'+(dictIds.length?'16px':'0')+'">FROM THE WEB</div>';
+  h+=webSources.map(function(s){var f=faviconFor(s.url);var host='';try{host=new URL(s.url).hostname.replace('www.','')}catch(e){}
+   return '<a class="src-row-item" href="'+esc(s.url)+'" target="_blank" rel="noopener">'+(f?'<img src="'+f+'" alt="">':icon('globe',15))+'<span><b>'+esc((s.title||host).slice(0,70))+'</b>'+(host?'<small>'+esc(host)+'</small>':'')+'</span>'+icon('ext',14)+'</a>'}).join('');
+ }
+ return h;
+}
+var THINK_LINES=['Thinking\u2026','Checking relevant information\u2026','Comparing results\u2026','Preparing answer\u2026'];
+var thinkTimer=null;
+function showThinkDrawer(){var d=$('#thinkdrawer');if(!d)return;var idx=0;
+ d.innerHTML=THINK_LINES.map(function(l){return '<div class="row"><span class="dotwrap"><i></i><i></i><i></i></span>'+l+'</div>'}).join('');
+ requestAnimationFrame(function(){d.classList.add('show')});
+ function tick(){var rows=d.querySelectorAll('.row');rows.forEach(function(r,i){r.classList.toggle('active',i===idx)});idx=(idx+1)%THINK_LINES.length}
+ tick();clearInterval(thinkTimer);thinkTimer=setInterval(tick,1100);
+}
+function hideThinkDrawer(){var d=$('#thinkdrawer');if(!d)return;d.classList.remove('show');clearInterval(thinkTimer);thinkTimer=null}
+function sessionTitle(q){return q.length>42?q.slice(0,42)+'\u2026':q}
+function saveSession(){
+ if(!state.sessionId||!state.chat.length)return;
+ var all=Store.get('chatSessions',[]);var ix=all.findIndex(function(s){return s.id===state.sessionId});
+ var rec={id:state.sessionId,title:state.sessionTitle||sessionTitle(state.chat[0]&&state.chat[0].text||'Chat'),messages:state.chat,updatedAt:Date.now()};
+ if(ix>=0)all[ix]=rec;else all.unshift(rec);
+ all=all.slice(0,30);Store.set('chatSessions',all);
+}
+function loadSession(id){var all=Store.get('chatSessions',[]);var s=all.find(function(x){return x.id===id});if(!s)return;
+ state.chat=s.messages;state.sessionId=s.id;state.sessionTitle=s.title;state.chatDraft='';state.forceBottom=true;
+ if(state.view==='chat')renderMain(true);else goView('chat');
+}
+function historyHTML(){var all=Store.get('chatSessions',[]);
+ var h='<div class="mhead"><h3>'+icon('sparkles',20)+' '+AI_NAME+'</h3><button class="iconbtn" data-action="close-modal" aria-label="Close">'+icon('x',18)+'</button></div>';
+ h+='<button class="setlink" data-action="clear-chat">'+icon('plus',20)+'<span>Start new chat<small>Begin a fresh conversation</small></span></button>';
+ h+='<div class="src-group-label" style="margin:16px 0 6px">PREVIOUS CONVERSATIONS</div>';
+ if(!all.length)return h+'<p class="dim" style="font-size:13.5px">No previous conversations yet.</p>';
+ h+=all.map(function(s){var last=s.messages[s.messages.length-1];var snip=last?(last.role==='user'?last.text:(last.raw||'')):'';
+  return '<button class="setlink" data-action="hist-load" data-id="'+s.id+'"><span style="width:20px"></span><span><b style="display:block">'+esc(s.title)+'</b><small>'+esc(fmtPosted(s.updatedAt))+' \u00B7 '+esc(String(snip).slice(0,50))+'</small></span><span class="arr" data-action="hist-del" data-id="'+s.id+'" style="padding:6px">'+icon('trash',15)+'</span></button>'
+ }).join('');
+ return h}
+function toolsHTML(){
+ function row(k,ic,title,desc,on){return '<div class="setrow"><div class="tx" style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--acc);margin-top:2px">'+icon(ic,18)+'</span><span><b>'+title+'</b><small>'+desc+'</small></span></div><div class="seg" style="width:104px;flex:none"><button class="'+(on?'on':'')+'" data-action="tool-toggle" data-k="'+k+'" data-val="on">On</button><button class="'+(!on?'on':'')+'" data-action="tool-toggle" data-k="'+k+'" data-val="off">Off</button></div></div>'}
+ var h='<div class="mhead"><h3>'+icon('plus',20)+' Options</h3><button class="iconbtn" data-action="close-modal" aria-label="Close">'+icon('x',18)+'</button></div>';
+ h+=row('think','sparkles','Thinking','Shows a short thinking pause before the answer.',state.thinkMode);
+ h+=row('deep','globe','Deep Research','Searches the web for up-to-date information. Slower.',state.deepSearch);
+ return h}
+function askAI(q){
+ if(!state.sessionId){state.sessionId=Date.now()+'_'+Math.random().toString(36).slice(2,7);state.sessionTitle=sessionTitle(q)}
+ state.chat.push({role:'user',text:q});state.typing=true;state.chatDraft='';state.forceBottom=true;state.view='chat';renderMain();
+ if(!isOnlineNow()){state.typing=false;state.chat.push({role:'ai',html:'<p><b>No Internet Connection</b></p><p>'+AI_NAME+' needs an internet connection to think and answer. The offline dictionary still works with zero data \u2014 use the search bar.</p>',raw:'',sources:[],webSources:[],engine:'none',model:''});saveSession();renderMain();return}
+ var found=searchList(q).slice(0,4);
+ var relevant=found.length&&found[0].score>=60;
+ var ctx=relevant?found.map(function(f){var it=f.item;return{head:it.head,english:it.english,translations:it.trans,meaning:it.mean,pronunciation:it.pron||null}}):[];
+ if(state.thinkMode)showThinkDrawer();
+ var finish=function(html,raw,engine,model,webSources){state.typing=false;state.aiAbort=null;hideThinkDrawer();state.chat.push({role:'ai',html:html,raw:raw,sources:relevant?found.map(function(f){return f.item.id}):[],webSources:webSources||[],engine:engine,model:model||''});state.forceBottom=true;saveSession();renderMain()};
+ var runner=state.deepSearch?groqAskDeep:groqAsk;
+ runner(q,ctx,aiKey(),ctrlSignal()).then(function(res){finish(mdDoc(res.text),res.text,'groq',res.model,res.webSources)}).catch(function(err){
+  hideThinkDrawer();
+  if(err.name==='AbortError'){state.typing=false;state.aiAbort=null;renderMain();toast('Stopped','info');return}
+  if(String(err.message)==='AUTH'){finish('<p><b>Invalid API Key</b></p><p>The AI key could not be authenticated. Open Settings \u2192 AI Assistant to fix it.</p>','','error','');return}
+  if(relevant){var lh=localDictAnswer(q,found);finish(lh,lh.replace(/<[^>]+>/g,' '),'local','');return}
+  finish('<p><b>'+AI_NAME+' could not reach the AI service.</b></p><p>Check your connection and try again \u2014 dictionary search still works.</p>','','error','')});
+}
+function ctrlSignal(){var c=new AbortController();state.aiAbort=c;return c.signal}
+function stopAI(){if(state.aiAbort){state.aiAbort.abort()}else{state.typing=false;renderMain()}}
+function goView(v){viewStack.push({v:state.view,id:state.entryId,cat:state.catCur});state.view=v;try{history.pushState({d:viewStack.length},'')}catch(err){}renderMain(true)}
+window.addEventListener('popstate',function(){
+ var mr=$('#modal-root');if(mr&&mr.innerHTML.trim()){closeModal();try{history.pushState({d:viewStack.length},'')}catch(err){}return}
+ var s=viewStack.pop();if(s){state.view=s.v;state.entryId=s.id;state.catCur=s.cat}else{state.view='home'}renderMain(true)});
+function goHome(){viewStack=[];state.view='home';try{history.replaceState({d:0},'')}catch(err){}renderMain(true)}
+function goBack(){if(viewStack.length){try{history.back()}catch(err){var s=viewStack.pop();state.view=s.v;state.entryId=s.id;state.catCur=s.cat;renderMain(true)}}else goHome()}
+function renderMain(keep){try{var y=window.scrollY;var m=$('#main');
+ if(state.view!=='chat')hideThinkDrawer();
+ if(state.view==='chat')m.innerHTML=chatHTML();
+ else if(state.view==='entry')m.innerHTML=entryHTML(state.entryId);
+ else if(state.view==='results')m.innerHTML=resultsHTML();
+ else if(state.view==='letter')m.innerHTML=letterHTML();
+ else if(state.view==='categories')m.innerHTML=categoriesHTML();
+ else if(state.view==='catlist')m.innerHTML=catListHTML();
+ else if(state.view==='settings')m.innerHTML=settingsHTML();
+ else m.innerHTML=homeHTML();
+ bindImg();
+ document.body.classList.toggle('ai-full',state.view==='chat');
+ if(state.view==='chat'){var tt=$('#toTop');if(tt)tt.classList.remove('show')}
+ var isHome=(state.view==='home');
+ var tb=document.querySelector('.topbar');if(tb)tb.style.display=isHome?'':'none';
+ var lb=document.querySelector('.livebar');if(lb)lb.style.display=isHome?'':'none';
+ var sb=$('#stickyBar');sb.style.display=isHome?'':'none';
+ var nv=$('#nav');nv.style.display=(state.view==='chat')?'none':'flex';
+ nv.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-v')===state.view)});
+ if(state.view==='chat'){
+  var ci=$('#chatInput');if(ci){ci.value=state.chatDraft||'';syncSend();ci.addEventListener('input',function(){state.chatDraft=ci.value;syncSend()})}
+  adjustBar();
+  var sc=$('#aiscroll');
+  requestAnimationFrame(function(){if(sc&&(state.forceBottom||nearBottom)){sc.scrollTop=sc.scrollHeight}state.forceBottom=false});
+ }else if(!keep)window.scrollTo({top:0});else window.scrollTo({top:y});
+}catch(err){handleErr(err&&err.message)}}
+function syncSend(){var b=$('#sendBtn');if(!b)return;var empty=!(state.chatDraft||'').trim();
+ if(state.typing){b.className='sendbtn stop';b.innerHTML=icon('stop',16)}
+ else{b.className='sendbtn'+(empty?' dis':'');b.innerHTML=icon('send',18)}}
+function adjustBar(){var bar=$('#aibar');if(!bar)return;var vv=window.visualViewport;if(!vv){bar.style.bottom='0px';return}
+ var off=Math.max(0,window.innerHeight-vv.height-vv.offsetTop);bar.style.bottom=off+'px'}
+function adjustViewport(){
+ var vv=window.visualViewport;
+ if(vv){document.documentElement.style.setProperty('--app-vh',vv.height+'px');document.documentElement.style.setProperty('--app-vtop',vv.offsetTop+'px')}
+ else{document.documentElement.style.setProperty('--app-vh','100vh');document.documentElement.style.setProperty('--app-vtop','0px')}
+ adjustBar();
+}
+adjustViewport();
+if(window.visualViewport){visualViewport.addEventListener('resize',adjustViewport);visualViewport.addEventListener('scroll',adjustViewport)}
+window.addEventListener('orientationchange',function(){setTimeout(adjustViewport,300)});
+function onScroll(){
+ var el=(state.view==='chat')?$('#aiscroll'):null;
+ var y=el?el.scrollTop:window.scrollY;
+ nearBottom=el?(el.scrollTop+el.clientHeight>=el.scrollHeight-140):(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-140);
+ $('#toTop').classList.toggle('show',y>400&&state.view!=='chat');
+ if(state.view==='home'&&!el){
+  var list=AL();if(state.freshN>=list.length)return;
+  if(nearBottom){var prev=state.freshN;state.freshN=Math.min(list.length,state.freshN+50);
+   var ff=$('#freshFeed');if(ff){ff.insertAdjacentHTML('beforeend',list.slice(prev,state.freshN).map(cardHTML).join(''));bindImg()}}
+ }
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+document.addEventListener('scroll',function(e){if(e.target&&e.target.id==='aiscroll')onScroll()},true);
+function bindImg(){$('#main').querySelectorAll('img[data-fb]').forEach(function(im){im.addEventListener('error',function(){var d=document.createElement('div');d.className='mono';d.textContent=(im.getAttribute('data-fb')[0]||'Z').toUpperCase();im.replaceWith(d)})})}
+function langChip(k){var l=langOf(k);return '<span class="langdot"><i style="background:'+l.color+'"></i>'+l.name+'</span>'}
+function thumbFor(it){return '<div class="mono">'+esc(String(it.head||'Z').charAt(0).toUpperCase())+'</div>'}
+function cardHTML(it){var favs=Store.get('favs',[]);var on=favs.includes(it.id);
+ return '<article class="res" data-action="open-entry" data-id="'+it.id+'"><div class="thumb">'+thumbFor(it)+'</div><div class="res-body"><div class="res-top"><h3>'+esc(it.head)+'</h3>'+badgeHTML(it.postedAt)+(it.cat?'<span class="badge cat">'+esc(it.cat)+'</span>':'')+(it.local?'<span class="badge cw">PACK</span>':'')+'</div><div class="res-sub">'+esc(it.english)+' \u00B7 '+esc(it.pos||'noun')+(it.pron?' \u00B7 '+esc(it.pron):'')+'</div><div class="res-snip">'+hiText(it.mean||'',state.query||'')+'</div><div class="res-meta">'+langChip('nyanja')+langChip('bemba')+langChip('lozi')+'</div></div><div class="racts"><button class="heart" data-action="details" data-id="'+it.id+'" aria-label="Details">'+icon('info',18)+'</button><button class="heart '+(on?'on':'')+'" data-action="fav" data-id="'+it.id+'" aria-label="Save">'+icon('heart',19)+'</button></div></article>'}
+function transTable(it){return '<table class="tt"><tr><th>Language</th><th>Word</th></tr>'+LANGS.map(function(l){var v=it.trans&&it.trans[l.key];return '<tr><td>'+langChip(l.key)+'</td>'+(v?'<td style="display:flex;align-items:center;justify-content:space-between;gap:8px"><b>'+esc(v)+'</b><button class="cp" data-action="copy" data-copy="'+esc(v)+'" aria-label="Copy '+l.name+'">'+icon('copy',15)+'</button></td>':'<td class="na">Not available yet</td>')+'</tr>'}).join('')+'</table>'}
+function relatedSearches(it){
+ var chips=[];var seen={};
+ LANGS.forEach(function(l){if(l.key==='english')return;var v=it.trans&&it.trans[l.key];if(!v)return;var nv=norm(v);if(!nv||seen[nv]||nv===norm(it.head)||nv===norm(state.query))return;seen[nv]=1;chips.push('<button class="chip" data-action="do-search" data-q="'+esc(v)+'">See '+esc(it.english)+' in '+l.name+' \u203A</button>')});
+ if(!chips.length)return '';
+ return '<div class="sec"><h2>'+icon('zap',17)+' Here are more searches to try</h2></div><div class="recs">'+chips.join('')+'</div>'}
+function homeHTML(){
+ var list=AL();
+ if(state.loading&&!list.length)return '<div class="empty"><div class="spin"></div><h3>Loading dictionary\u2026</h3><p>Fetching the ZamDict index. This happens once per device.</p></div>';
+ if(!list.length)return '<div class="empty">'+icon('cloud',44)+'<h3>No dictionary source</h3><p>'+(isOnlineNow()?'The dictionary could not be loaded. Tap retry to try again.':'You are offline and no dictionary is available on this device yet.')+'</p><br><button class="btn" data-action="retry-index">'+icon('refresh',16)+' Retry</button></div>';
+ var wotd=list[Math.floor(Date.now()/DAY)%list.length];
+ var recs=Store.get('offlineOn',false)?Store.get('recents',[]):(state.sessionRecs||[]);
+ var favs=Store.get('favs',[]).map(function(id){return list.find(function(e){return e.id===id})}).filter(Boolean);
+ state.freshN=50;
+ var EAGLE=P+'15eaaa53c-fae6-4156-82b7-7067275784ba.png';
+ var h='<section class="hero"><div class="hero-art"><img src="'+EAGLE+'" alt="Zambian dictionary" loading="lazy" data-catkey="hero_eagle" data-liveurl="'+EAGLE+'" onerror="this.style.display=\'none\'"><span class="cap">ONE ZAMBIA \u00B7 MANY TONGUES</span></div><span class="hero-badge">'+icon('zap',13)+' Living dictionary of Zambia</span><h1>One word.<br><span class="grad">Eight tongues.</span></h1><p>Search English, Nyanja, Bemba, Chewa, Tonga, Lozi, Nsenga and Tumbuka \u2014 meanings, pronunciations, pictures and examples. Works with zero data offline.</p></section>';
+ if(wotd){h+='<div class="sec"><h2>'+icon('sun',17)+' Word of the Day</h2><span class="link">'+fmtPosted(Date.now())+'</span></div><div class="wotd" data-action="open-entry" data-id="'+wotd.id+'"><div class="thumb">'+thumbFor(wotd)+'</div><div class="wotd-body"><div class="wotd-top"><h3>'+esc(wotd.head)+'</h3>'+badgeHTML(wotd.postedAt)+'</div><p><b>'+esc(wotd.english)+'</b> \u00B7 '+esc(wotd.trans&&wotd.trans.bemba||'\u2014')+' (Bemba) \u00B7 '+esc(wotd.trans&&wotd.trans.lozi||'\u2014')+' (Lozi)</p><p class="dim" style="font-size:12px;margin-top:4px">'+esc(wotd.mean||'')+'</p></div>'+icon('chev',20)+'</div>'}
+ h+='<div class="sec"><h2>'+icon('grid',17)+' Browse</h2></div><div class="cats"><button class="pill" data-action="open-categories">'+icon('grid',15)+' Categories</button><button class="pill" data-action="open-az">'+icon('book',15)+' A\u2013Z</button></div>';
+ if(recs&&recs.length){h+='<div class="sec"><h2>'+icon('clock',17)+' Recent Searches</h2><button class="link" data-action="clear-recents">Clear all</button></div><div class="recs">'+recs.map(function(r){return '<span class="chip" data-action="do-search" data-q="'+esc(r)+'">'+esc(r)+'</span>'}).join('')+'</div>'}
+ if(favs.length){h+='<div class="sec"><h2>'+icon('heart',17)+' Saved</h2></div><div class="feed">'+favs.map(cardHTML).join('')+'</div>'}
+ h+='<div class="sec"><h2>'+icon('upload',17)+' Fresh on ZamDict</h2></div><div class="feed" id="freshFeed">'+list.slice(0,50).map(cardHTML).join('')+'</div>';
+ setTimeout(hydrateCategoryImages,0);
+ return h}
+function categoriesHTML(){
+ var list=AL();var counts={};list.forEach(function(e){if(e.cat)counts[e.cat]=(counts[e.cat]||0)+1});
+ var cats=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]});
+ var h='<div class="sec"><h2>'+icon('grid',17)+' Categories</h2><button class="iconbtn" data-action="back" aria-label="Back">'+icon('back',18)+'</button></div>';
+ h+='<div class="catgrid">'+cats.map(function(c){var url=CATIMG[c]||CATIMG.places;return '<div class="catcard" data-action="open-cat" data-c="'+esc(c)+'"><img loading="lazy" data-catkey="'+esc(c)+'" data-liveurl="'+esc(url)+'" src="'+url+'" alt="'+esc(catLabel(c))+'" onerror="this.src=this.getAttribute(\'data-liveurl\')"><div class="ov"></div><div class="nm"><span style="background:none;border:none;padding:0;font-size:14px">'+esc(catLabel(c))+'</span><span>'+counts[c]+'</span></div></div>'}).join('')+'</div>';
+ setTimeout(hydrateCategoryImages,0);
+ return h}
+function catListHTML(){
+ var c=state.catCur;var list=AL().filter(function(e){return e.cat===c});
+ var h='<div class="sec"><h2>'+icon('grid',17)+' '+esc(catLabel(c))+' ('+list.length+')</h2><button class="iconbtn" data-action="back" aria-label="Back">'+icon('back',18)+'</button></div>';
+ return h+(list.length?'<div class="feed">'+list.map(cardHTML).join('')+'</div>':'<div class="empty">'+icon('grid',44)+'<h3>Nothing here yet</h3></div>')}
+function resultsHTML(){
+ var res=searchList(state.query);var fz=res.length&&res[0].fuzzy?res[0].fuzzy:null;
+ var h='<div class="sec"><h2>'+icon('search',17)+' '+res.length+' result'+(res.length===1?'':'s')+' \u00B7 \u201C'+esc(state.query)+'\u201D</h2><button class="iconbtn" data-action="back" aria-label="Back">'+icon('back',18)+'</button></div>';
+ if(!isOnlineNow())h+='<div class="note" style="margin-bottom:10px">'+icon('cloud',16)+'<span><b>Offline mode.</b> Showing the local offline dictionary (zero data used).</span></div>';
+ if(fz)h+='<div class="note" style="margin-bottom:10px">'+icon('sparkles',16)+'<span>Strong search matched <b>'+esc(fz.to)+'</b> for your spelling <b>'+esc(fz.from)+'</b>.</span></div>';
+ if(!res.length)return h+'<div class="empty">'+icon('search',44)+'<h3>No matches yet</h3><p>'+(isOnlineNow()?'Suggest it \u2014 it reaches ZamDict after approval.':'You are offline and this word is not in the offline dataset.')+'</p><br>'+(isOnlineNow()?'<button class="btn" data-action="open-plus-prefill" data-q="'+esc(state.query)+'">'+icon('plus',16)+' Suggest this word</button>':'')+'</div>';
+ var top=res[0].item;
+ h+='<div class="panel"><h4>'+icon('globe',15)+' Translation table \u00B7 '+esc(top.head)+'</h4>'+transTable(top)+'</div>';
+ h+='<div class="feed" style="margin-top:12px">'+res.map(function(r){return cardHTML(r.item)}).join('')+'</div>';
+ h+=relatedSearches(top);
+ return h}
+function letterHTML(){var L=state.letter.toLowerCase();var list=AL().filter(function(e){return norm(e.head).startsWith(L)}).sort(function(a,b){return String(a.head).localeCompare(String(b.head))});
+ var h='<div class="sec"><h2>'+icon('book',17)+' Letter '+esc(state.letter)+'</h2><button class="iconbtn" data-action="back" aria-label="Back">'+icon('back',18)+'</button></div>';
+ return h+(list.length?'<div class="feed">'+list.map(cardHTML).join('')+'</div>':'<div class="empty">'+icon('book',44)+'<h3>Nothing under '+esc(state.letter)+'</h3></div>')}
+function azHTML(){return '<div class="sec"><h2>'+icon('book',17)+' Browse A\u2013Z</h2><button class="iconbtn" data-action="back" aria-label="Back">'+icon('back',18)+'</button></div><div class="az">'+'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(function(L){var has=AL().some(function(e){return norm(e.head).startsWith(L.toLowerCase())});return '<button class="'+(has?'has':'')+'" data-action="letter" data-l="'+L+'">'+L+'</button>'}).join('')+'</div>'}
+function examplesHTML(e){
+ if(!e)return '<p class="dim">Examples are available online. The offline dataset carries meanings and translations.</p>';
+ var ex=e.examples;var out='';
+ if(Array.isArray(ex)&&ex.length){out+=ex.map(function(x){return '<div class="ex"><span class="lg">Nyanja</span><b>'+esc(x.t)+'</b>'+(x.x?'<i>'+esc(x.x)+'</i>':'')+'</div>'}).join('')}
+ else if(ex&&typeof ex==='object'){Object.keys(ex).forEach(function(k){var arr=ex[k]||[];arr.forEach(function(x){out+='<div class="ex"><span class="lg">'+esc(langOf(k).name)+'</span><b>'+esc(typeof x==='string'?x:x.t)+'</b>'+(x.x?'<i>'+esc(x.x)+'</i>':'')+'</div>'})})}
+ return out||'<p class="dim">Examples are not available for this entry yet. We do not publish unverified examples.</p>'}
+function detailsHTML(it){var e=FULL[it.id]||null;
+ var t=fmtPosted(it.postedAt,true);var parts=t.split(' \u00B7 ');
+ return '<div class="mhead"><h3>'+icon('info',20)+' Details</h3><button class="iconbtn" data-action="close-modal" aria-label="Close">'+icon('x',18)+'</button></div>'+
+ '<div class="fbrow"><span>Posted date</span><span>'+esc(parts[0]||t)+'</span></div>'+
+ '<div class="fbrow"><span>Posted time</span><span>'+esc(parts[1]||'\u2014')+'</span></div>'+
+ '<div class="fbrow"><span>Author</span><span>'+esc((e&&e.author)||it.author||'ZamDict Team')+'</span></div>'+
+ '<div class="fbrow"><span>Source</span><span>'+esc((e&&e.source)||it.source||(it.local?'Packaged collection':'ZamDict Autonomous Build'))+'</span></div>'+
+ '<div class="fbrow"><span>Category</span><span>'+esc(catLabel(it.cat||''))+'</span></div>'+
+ '<div class="fbrow"><span>Confidence</span><span>'+esc((e&&e.confidence)||it.conf||'medium')+'</span></div>'+
+ '<div class="fbrow"><span>Entry ID</span><span>'+esc(it.id)+'</span></div>'}
+function entryHTML(id){
+ var it=AL().find(function(x){return x.id===id})||Store.get('ocache',{})[id];
+ if(!it)return homeHTML();
+ var e=FULL[it.id]||null;
+ var favs=Store.get('favs',[]);var on=favs.includes(id);
+ var rel=AL().filter(function(x){return x.id!==id&&x.cat&&x.cat===it.cat}).slice(0,6);
+ var h='<div class="entrybar"><button class="iconbtn sm" data-action="back" aria-label="Back">'+icon('back',17)+'</button></div>';
+ h+='<div class="media">'+(e&&e.image?'<img src="'+e.image+'" alt="'+esc(it.head)+'" loading="lazy" data-fb="'+esc(it.head)+'">':thumbFor(it).replace('class="mono"','class="mono" style="height:100%"'))+'<span class="cap">'+(e&&e.image?(e.imageFromCache?'Saved for offline':'ZamDict image'):'Offline \u00B7 image online')+'</span></div>';
+ h+='<div class="mediaacts"><button class="docbtn" data-action="open-report" data-id="'+id+'" aria-label="Report an issue with this word" title="Report">'+icon('flag',15)+'</button><button class="docbtn" data-action="copy" data-copy="'+esc(it.head+' \u2014 '+it.english)+'" aria-label="Copy" title="Copy">'+icon('copy',15)+'</button><button class="docbtn" data-action="details" data-id="'+id+'" aria-label="Details" title="Details">'+icon('info',15)+'</button><button class="docbtn" data-action="fav" data-id="'+id+'" aria-label="Save" title="Save" style="'+(on?'color:var(--acc)':'')+'">'+icon('heart',15)+'</button></div>';
+ h+='<div class="ehead"><h1>'+esc(it.head)+'</h1><div class="row">'+badgeHTML(it.postedAt)+(it.cat?'<span class="badge cat">'+esc(it.cat)+'</span>':'')+(it.local?'<span class="badge cw">PACK</span>':'')+'<span class="badge old" style="text-transform:uppercase">'+esc(it.pos||'noun')+'</span></div></div>';
+ if(it.pron)h+='<div class="pron">'+icon('vol',16)+' '+esc(it.pron)+'</div>';
+ h+='<p class="eeng">English: <b>'+esc(it.english)+'</b></p>';
+ h+='<div class="panel"><h4>'+icon('book',15)+' Meaning</h4><p>'+esc((e&&e.meaning)||it.mean||'')+'</p></div>';
+ h+='<div class="panel"><h4>'+icon('globe',15)+' Translations</h4>'+LANGS.map(function(l){var v=it.trans&&it.trans[l.key];return '<div class="trow"><span class="nm"><i style="background:'+l.color+'"></i>'+l.name+'</span>'+(v?'<span class="val">'+esc(v)+'</span><button class="cp" data-action="copy" data-copy="'+esc(v)+'" aria-label="Copy '+l.name+'">'+icon('copy',16)+'</button>':'<span class="val na">Not available yet</span>')+'</div>'}).join('')+'</div>';
+ h+='<div class="panel"><h4>'+icon('console',15)+' Examples</h4>'+examplesHTML(e)+'</div>';
+ h+='<div style="margin-top:12px"><button class="btn ghost pill-compact" data-action="details" data-id="'+id+'">'+icon('info',14)+' Details</button></div>';
+ if(e&&((e.synonyms&&e.synonyms.length)||(e.antonyms&&e.antonyms.length))){h+='<div class="panel"><h4>'+icon('grid',15)+' Synonyms & antonyms</h4>'+((e.synonyms&&e.synonyms.length)?'<p><b>Synonyms:</b> '+esc(e.synonyms.join(', '))+'</p>':'')+((e.antonyms&&e.antonyms.length)?'<p style="margin-top:6px"><b>Antonyms:</b> '+esc(e.antonyms.join(', '))+'</p>':'')+'</div>'}
+ if(rel.length)h+='<div class="panel"><h4>'+icon('zap',15)+' Related words</h4><div class="rel">'+rel.map(function(r){return '<button class="chip" data-action="open-entry" data-id="'+r.id+'">'+esc(r.head)+'</button>'}).join('')+'</div></div>';
+ h+=relatedSearches(it);
+ if(!e&&isOnlineNow()&&!it.local){fetchJ('/entries/'+id,null,30000).then(function(fe){if(fe){FULL[id]=fe;
+   if(Store.get('offlineOn',false)===true){var c=Store.get('ocache',{});var slim=Object.assign({},fe);var hadImg=!!slim.image;delete slim.image;slim.id=id;slim.hasImage=hadImg;c[id]=slim;var ks=Object.keys(c);if(ks.length>200){ks.slice(0,ks.length-200).forEach(function(k){delete c[k]})}Store.set('ocache',c);
+    if(hadImg)IDB.putImage(id,fe.image);
+   }
+   renderMain(true)}}).catch(function(){})}
+ else if(!e&&!isOnlineNow()&&Store.get('offlineOn',false)===true){IDB.getImage(id).then(function(cached){if(cached){FULL[id]=Object.assign({},FULL[id]||{},{image:cached,imageFromCache:true});if(state.view==='entry'&&state.entryId===id)renderMain(true)}})}
+ return h}
+function chatHTML(){var custom=Store.get('groqKey','');
+ var h='<div class="aiscreen" id="aiscroll"><div class="aihead"><span class="t">'+icon('sparkles',22)+'<span>'+AI_NAME+'<span class="sub">'+(isOnlineNow()?(custom?'Custom key \u00B7 Groq':(state.deepSearch?'Deep Research \u00B7 Groq Compound':'gpt-oss-120b \u00B7 Groq')):'Offline \u00B7 search still works')+'</span></span></span><button class="iconbtn sm" data-action="chat-menu" aria-label="Chat menu">'+icon('menu',18)+'</button></div>';
+ h+='<div id="aidoc">';
+ if(!state.chat.length&&!state.typing)h+='<div class="aistart"><div class="big">Mwaiseni \ud83e\udd17</div><p><b>How can I help you with ZamDict?</b> Ask about words, translations, culture or anything. '+AI_NAME+' was created by World Of Discoveries (WOD) and answers dictionary questions from the live ZamDict database. Tap <b>+</b> next to the message box for <b>Thinking</b> or <b>Deep Research</b>.</p><div class="sugg">'+['What is your name?','Who created you?','What is dog in Bemba?','Translate water to Lozi','Meaning of nshima','Mwaiseni \u2014 what does it mean?'].map(function(s){return '<button class="chip" data-action="use-prompt" data-q="'+s+'">'+s+'</button>'}).join('')+'</div></div>';
+ state.chat.forEach(function(m,i){
+  if(m.role==='user')h+='<div class="uq"><span class="bub">'+esc(m.text)+'</span></div>';
+  else h+='<div class="aidoc">'+m.html+'</div><div class="docacts"><button class="docbtn" data-action="copy-ai" data-i="'+i+'" aria-label="Copy response" title="Copy">'+icon('copy',16)+'</button><button class="docbtn" data-action="share-ai" data-i="'+i+'" aria-label="Share response" title="Share">'+icon('share',16)+'</button></div>'+sourcesSummaryHTML(i,m.sources,m.webSources);
+ });
+ if(state.typing&&!state.thinkMode)h+='<div class="think"><span class="tdot"></span></div>';
+ h+='</div>';
+ h+='<div class="aibar" id="aibar"><div class="aibar-in"><button class="toolbtn'+((state.thinkMode||state.deepSearch)?' on':'')+'" data-action="chat-tools" aria-label="Thinking and Deep Research options">'+icon('plus',18)+'</button><input id="chatInput" type="text" autocomplete="off" autocapitalize="off" placeholder="Ask '+AI_NAME+' anything\u2026" aria-label="Ask '+AI_NAME+'"><button class="sendbtn" id="sendBtn" data-action="send-ai" aria-label="Send">'+icon('send',18)+'</button></div></div></div>';
+ return h}
+function settingsHTML(){var off=Store.get('offlineOn',false)===true;var ocount=Object.keys(Store.get('ocache',{})).length;var custom=Store.get('groqKey','');var curl=Store.get('consoleUrl','');var list=AL();
+ var nm=list.filter(function(e){return daysSince(e.postedAt)<=30}).length;
+ var theme=Store.get('theme','dark');var tsize=Store.get('tsize','md');var font=Store.get('font','default');var monitorOn=Store.get('monitorOn',true)===true;var shareUrl=Store.get('shareUrl','');
+ var h='<div class="sec"><h2>'+icon('gear',18)+' Settings</h2><button class="iconbtn" data-action="back" aria-label="Back">'+icon('back',18)+'</button></div>';
+ h+='<div class="panel"><h4>'+icon('sun',15)+' Appearance</h4>';
+ h+='<div class="field"><label>Theme</label><div class="seg">'+['dark','light','system'].map(function(v){return '<button class="'+(theme===v?'on':'')+'" data-action="set-theme" data-val="'+v+'">'+v.charAt(0).toUpperCase()+v.slice(1)+'</button>'}).join('')+'</div></div>';
+ h+='<div class="field"><label>Text size</label><div class="seg">'+[['sm','Small'],['md','Default'],['lg','Large']].map(function(v){return '<button class="'+(tsize===v[0]?'on':'')+'" data-action="set-tsize" data-val="'+v[0]+'">'+v[1]+'</button>'}).join('')+'</div></div>';
+ h+='<div class="field"><label>Font</label><div class="seg">'+[['default','Display'],['system','System'],['serif','Serif']].map(function(v){return '<button class="'+(font===v[0]?'on':'')+'" data-action="set-font" data-val="'+v[0]+'">'+v[1]+'</button>'}).join('')+'</div></div></div>';
+ h+='<div class="panel"><h4>'+icon('info',15)+' Dictionary</h4><div class="fbrow"><span>Entries</span><span class="ok">'+list.length+'</span></div><div class="fbrow"><span>Languages</span><span class="ok">'+LANGS.length+'</span></div><div class="fbrow"><span>New this month</span><span class="ok">'+nm+'</span></div><div class="fbrow"><span>Packaged phrases</span><span class="ok">'+PACK_LIST.length+'</span></div><div class="fbrow"><span>Device cache</span><span>'+ocount+' entries</span></div><div class="note" style="margin-top:10px">'+icon('info',15)+'<span>All lists show newest first. New Firebase entries merge automatically on next load.</span></div></div>';
+ h+='<div class="panel"><h4>'+icon('cloud',15)+' Offline</h4><div class="fbrow"><span>Offline Searches (device cache)</span><span class="'+(off?'ok':'warn')+'">'+(off?'ON':'OFF')+'</span></div><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn sm '+(off?'ghost':'grn')+'" data-action="offline-toggle">'+(off?'Turn OFF':'Turn ON')+'</button><button class="btn sm danger" data-action="offline-clear">'+icon('trash',14)+' Clear saved offline searches</button></div></div>';
+ h+='<div class="panel"><h4>'+icon('sparkles',15)+' AI Assistant ('+AI_NAME+')</h4><div class="fbrow"><span>Connection</span><span class="ok">'+(custom?'CUSTOM KEY':'NO KEY SET')+'</span></div><div class="fbrow"><span>Model</span><span>openai/gpt-oss-120b</span></div><div class="field" style="margin-top:10px"><label>Optional Groq API key (saved only in this browser)</label><input id="groqIn" type="password" placeholder="Groq API key" value="'+esc(custom)+'"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-action="save-groq">'+icon('check',14)+' Save custom key</button>'+(custom?'<button class="btn sm ghost" data-action="clear-groq">'+icon('trash',14)+' Clear saved key</button>':'')+'</div></div>';
+ h+='<div class="panel"><h4>'+icon('console',15)+' ZamDict API for developers</h4><div class="fbrow"><span>Free trial per key</span><span>50 searches</span></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn sm" data-action="api-create">'+icon('plus',14)+' Create API key</button><button class="btn sm ghost" data-action="api-manage">'+icon('console',14)+' API console</button></div><div class="codebox" style="margin-top:10px">GET '+BASE+'/entries.json\nGET '+BASE+'/entries/{id}.json\nAuthorization: Bearer zd_\u2026</div></div>';
+ h+='<div class="panel"><h4>'+icon('shield',15)+' Privacy & improving ZamDict</h4>';
+ h+='<div class="setrow"><div class="tx"><b>Help improve ZamDict</b><small>Your searches may be used anonymously (no name, no device ID) to see which words and translations to add or fix next.</small></div><div class="seg" style="width:116px;flex:none"><button class="'+(monitorOn?'on':'')+'" data-action="set-monitor" data-val="on">On</button><button class="'+(!monitorOn?'on':'')+'" data-action="set-monitor" data-val="off">Off</button></div></div>';
+ h+='<div class="note" style="margin-top:8px">'+icon('info',15)+'<span>Some words or translations may be incorrect or incomplete. ZamDict is continuously improved through updates and user feedback \u2014 use the flag icon on any word to report an issue.</span></div></div>';
+ h+='<div class="panel"><h4>'+icon('mail',15)+' Email delivery (optional)</h4><p class="dim" style="font-size:12.5px">Reports and feedback always reach Zam Console. To also get them by email, create a free account at emailjs.com and paste your IDs here.</p><div class="grid2" style="margin-top:8px"><div class="field"><label>Service ID</label><input id="ejsService" value="'+esc((Store.get('emailjsCfg',null)||{}).serviceId||'')+'"></div><div class="field"><label>Template ID</label><input id="ejsTemplate" value="'+esc((Store.get('emailjsCfg',null)||{}).templateId||'')+'"></div></div><div class="field"><label>Public key</label><input id="ejsKey" value="'+esc((Store.get('emailjsCfg',null)||{}).publicKey||'')+'"></div><button class="btn sm" data-action="save-emailjs">'+icon('check',14)+' Save</button></div>';
+ h+='<button class="setlink" data-action="open-plus">'+icon('upload',20)+'<span>Upload Information on ZamDict<small>Submissions wait for approval in ZamApproval</small></span><span class="arr">'+icon('chev',18)+'</span></button>';
+ h+='<button class="setlink" data-action="open-feedback">'+icon('mail',20)+'<span>Send Feedback<small>Tell us what\u2019s missing or wrong</small></span><span class="arr">'+icon('chev',18)+'</span></button>';
+ h+='<button class="setlink" data-action="invite-friends">'+icon('heart',20)+'<span>Invite Friends<small>Share ZamDict with people you know</small></span><span class="arr">'+icon('chev',18)+'</span></button>';
+ h+='<button class="setlink" data-action="share-app">'+icon('share',20)+'<span>Share ZamDict<small>Send the app to a friend</small></span><span class="arr">'+icon('chev',18)+'</span></button>';
+ h+='<div class="field" style="margin-top:4px"><label>App link (optional, shown when inviting)</label><input id="shareUrlIn" type="url" placeholder="https://\u2026" value="'+esc(shareUrl)+'"></div><button class="btn sm" data-action="save-shareurl">'+icon('check',14)+' Save link</button>';
+ h+='<button class="setlink" style="margin-top:12px" data-action="open-console">'+icon('ext',20)+'<span>Zam Console<small>'+(curl?esc(curl):'Set your Zam Console URL below')+'</small></span><span class="arr">'+icon('chev',18)+'</span></button>';
+ h+='<div class="field" style="margin-top:4px"><label>Zam Console URL</label><input id="consoleUrlIn" type="url" placeholder="https://\u2026" value="'+esc(curl)+'"></div><button class="btn sm" data-action="save-console">'+icon('check',14)+' Save URL</button>';
+ h+='<button class="setlink" style="margin-top:12px" data-action="check-updates">'+icon('refresh',20)+'<span>Check for Updates<small>App v'+APP_VERSION+'</small></span><span class="arr">'+icon('chev',18)+'</span></button>';
+ h+='<button class="setlink" data-action="report-bug">'+icon('console',20)+'<span>Report a Bug<small>'+BUG_EMAIL+'</small></span><span class="arr">'+icon('chev',18)+'</span></button>';
+ h+='<div class="panel"><h4>'+icon('globe',15)+' Social media</h4><div class="recs">'+Object.keys(SOCIAL).map(function(k){return '<button class="chip" data-action="social" data-s="'+k+'">'+k+' \u203A</button>'}).join('')+'</div></div>';
+ h+='<div class="panel"><h4>'+icon('shield',15)+' Safety</h4><p class="dim" style="font-size:13px">All dictionary information is reviewed and approved in ZamApproval before publication to reduce false information, misinformation and incorrect translations. Some words or translations may still be incorrect or incomplete \u2014 ZamDict keeps improving through updates and the feedback you send.</p></div>';
+ h+='<div class="panel"><h4>'+icon('info',15)+' About ZamDict</h4><p class="dim" style="font-size:13px">ZamDict is built in Zambia by <b style="color:var(--ink)">World Of Discoveries (WOD)</b> to help Zambians, students and other users easily translate and understand English and major Zambian local languages. Free, accessible, useful, educational.</p></div>';
+ h+='<div class="panel"><h4>'+icon('book',15)+' Learn more & TC&CS</h4><p class="dim" style="font-size:13px">Community submissions \u2192 ZamApproval review \u2192 publication. TC&CS: free as-is service; approved content only; no knowingly false submissions; API keys personal and rate-limited; offline data stays on device; no personal profiles collected.</p></div>';
+ return h}
+function plusHTML(prefill){prefill=prefill||'';
+ var h='<div class="mhead"><h3>'+icon('plus',20)+' Upload Information</h3><button class="iconbtn" data-action="close-modal" aria-label="Close">'+icon('x',18)+'</button></div>';
+ h+='<div class="note">'+icon('shield',15)+'<span>Submissions go to <b>/submissions</b> and appear on ZamDict only after approval in ZamApproval.</span></div>';
+ h+='<form id="subForm" style="margin-top:12px"><div class="grid2"><div class="field"><label>English *</label><input name="english" required value="'+esc(prefill)+'"></div><div class="field"><label>Headword *</label><input name="head" required value="'+esc(prefill)+'"></div></div>';
+ h+='<div class="grid2">'+LANGS.filter(function(l){return l.key!=='english'}).map(function(l){return '<div class="field"><label><i style="background:'+l.color+'"></i>'+l.name+'</label><input name="t_'+l.key+'"></div>'}).join('')+'</div>';
+ h+='<div class="field"><label>Meaning *</label><textarea name="meaning" required></textarea></div>';
+ h+='<div class="field"><label>Image (optional, compressed to base64)</label><input type="file" id="imgIn" accept="image/*"><div id="imgPrev"></div></div>';
+ h+='<button class="btn" type="submit">'+icon('upload',16)+' Send for approval</button></form>';
+ return h}
+function feedbackHTML(wordId){
+ var it=wordId?(AL().find(function(x){return x.id===wordId})||Store.get('ocache',{})[wordId]):null;
+ var h='<div class="mhead"><h3>'+icon('flag',20)+' '+(it?'Report an issue':'Send feedback')+'</h3><button class="iconbtn" data-action="close-modal" aria-label="Close">'+icon('x',18)+'</button></div>';
+ if(it)h+='<div class="note">'+icon('info',15)+'<span>Reporting <b>'+esc(it.head)+'</b> ('+esc(it.english)+'). Tell us what looks wrong \u2014 incorrect, incomplete, or not a real word.</span></div>';
+ else h+='<div class="note">'+icon('info',15)+'<span>Missing a word, spotted a bug, or have an idea? Tell the ZamDict team.</span></div>';
+ h+='<div class="reportbox"><textarea id="fbText" placeholder="'+(it?'What\u2019s wrong with this word?':'What would you like to tell us?')+'"></textarea></div>';
+ h+='<button class="btn" style="margin-top:10px" data-action="send-feedback" data-id="'+(wordId||'')+'">'+icon('send',16)+' Send</button>';
+ h+='<p class="dim" style="font-size:11.5px;margin-top:10px">Sent anonymously to the ZamDict team \u2014 no personal information is collected.</p>';
+ return h}
+function canSendFeedback(wordId){
+ var now=Date.now();
+ if(wordId){var last=Store.get('rep_'+wordId,0);if(now-last<12*3600000)return 'You already reported this word recently \u2014 thank you.'}
+ var today=new Date().toISOString().slice(0,10);var counts=Store.get('fbCounts',{});if(counts.day!==today){counts={day:today,n:0}}
+ if(counts.n>=8)return 'You\u2019ve sent several reports today \u2014 please try again tomorrow.';
+ return null}
+function sendFeedback(wordId,text){
+ var block=canSendFeedback(wordId);if(block){toast(block,'info');return}
+ if(!isOnlineNow()){toast('No Internet Connection \u00B7 feedback needs internet','cloud');return}
+ var it=wordId?(AL().find(function(x){return x.id===wordId})||Store.get('ocache',{})[wordId]):null;
+ var payload={wordId:wordId||null,head:it?it.head:null,english:it?it.english:null,text:text.slice(0,600),ts:Date.now(),app:APP_VERSION,online:isOnlineNow()};
+ var node=wordId?'/reports':'/feedback';
+ fetchJ(node,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(function(){
+  Store.set('rep_'+(wordId||'x'),Date.now());
+  var today=new Date().toISOString().slice(0,10);var counts=Store.get('fbCounts',{});if(counts.day!==today)counts={day:today,n:0};counts.n=(counts.n||0)+1;Store.set('fbCounts',counts);
+  closeModal();toast('Thanks \u2014 feedback sent','check');
+  maybeEmailReport(payload);
+ }).catch(function(){toast('Could not send \u2014 check your connection and try again','info')});
+}
+function maybeEmailReport(payload){
+ var cfg=Store.get('emailjsCfg',null);if(!BUG_EMAIL||!cfg||!cfg.serviceId||!cfg.templateId||!cfg.publicKey)return;
+ try{fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:cfg.serviceId,template_id:cfg.templateId,user_id:cfg.publicKey,template_params:{to_email:BUG_EMAIL,word:payload.head||'(general feedback)',english:payload.english||'',message:payload.text,when:new Date(payload.ts).toString()}})}).catch(function(){})}catch(e){}
+}
+function apiModal(){var keys=Store.get('mykeys',[]);
+ var h='<div class="mhead"><h3>'+icon('console',20)+' API console</h3><button class="iconbtn" data-action="close-modal" aria-label="Close">'+icon('x',18)+'</button></div>';
+ h+='<div class="field"><label>Test query</label><input id="apiQ" placeholder="dog / galu / madzi"></div>';
+ h+='<button class="btn" data-action="api-run">'+icon('zap',16)+' Run test search</button><div class="codebox" id="apiOut" style="margin-top:10px">Response appears here.</div>';
+ h+='<div class="msec"><h5>'+icon('info',14)+' My keys</h5>'+(keys.length?keys.map(function(k){return '<div class="fbrow"><code style="color:var(--grn)">'+esc(k.key)+'</code><span>'+(k.limit-k.usage)+'/'+k.limit+' left</span></div>'}).join(''):'<p class="dim">No keys yet.</p>')+'<button class="btn sm" style="margin-top:8px" data-action="api-create">'+icon('plus',14)+' Create API key</button></div>';
+ return h}
+function cameraHTML(){
+ return '<div class="mhead"><h3>'+icon('camera',20)+' Scan &amp; Translate</h3><button class="iconbtn" data-action="close-modal" aria-label="Close">'+icon('x',18)+'</button></div>'+
+ '<div class="beta-note"><span class="beta-tag">BETA</span><span>Scan and Translate are still in beta and not fully functional yet.</span></div>'+
+ '<div class="note">'+icon('info',15)+'<span>Take or upload a photo of text. ZamDict reads the words (OCR) and looks each one up in the dictionary \u2014 this is word lookup, not full sentence translation.</span></div>'+
+ '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" data-action="cam-pick" data-kind="camera">'+icon('camera',16)+' Take Picture</button><button class="btn ghost" data-action="cam-pick" data-kind="upload">'+icon('upload',16)+' Upload Image</button></div>'+
+ '<input type="file" id="camFileCamera" accept="image/*" capture="environment" hidden>'+
+ '<input type="file" id="camFileUpload" accept="image/*" hidden>'+
+ '<div id="camResult"></div>';
+}
+function ensureTesseract(){
+ if(window.Tesseract)return Promise.resolve();
+ return new Promise(function(res,rej){
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+  s.onload=function(){res()};s.onerror=function(){rej(new Error('load-fail'))};
+  document.head.appendChild(s);
+ });
+}
+function runOCR(file){
+ var out=$('#camResult');if(!out)return;
+ if(!file){return}
+ if(!isOnlineNow()){out.innerHTML='<div class="camresult"><p class="dim">Scan &amp; Translate needs internet the first time, to load the text-reading engine.</p></div>';return}
+ out.innerHTML='<div class="camresult"><div class="ocrtext" id="ocrStatus">Loading text-recognition engine\u2026</div></div>';
+ ensureTesseract().then(function(){
+  var reader=new FileReader();
+  reader.onload=function(){
+   var dataUrl=reader.result;
+   var st=$('#ocrStatus');if(st)st.textContent='Reading text from the image\u2026';
+   Tesseract.recognize(dataUrl,'eng',{logger:function(m){if(m&&m.status==='recognizing text'){var st2=$('#ocrStatus');if(st2)st2.textContent='Reading text\u2026 '+Math.round((m.progress||0)*100)+'%'}}}).then(function(res){
+    renderOCRResult(((res&&res.data&&res.data.text)||'').trim());
+   }).catch(function(){out.innerHTML='<div class="camresult"><p class="dim">Could not read text from that image. Try a clearer, well-lit photo.</p></div>'});
+  };
+  reader.onerror=function(){out.innerHTML='<div class="camresult"><p class="dim">Could not open that image.</p></div>'};
+  reader.readAsDataURL(file);
+ }).catch(function(){out.innerHTML='<div class="camresult"><p class="dim">Could not load the text-recognition engine. Check your internet connection and try again.</p></div>'});
+}
+function renderOCRResult(text){
+ var out=$('#camResult');if(!out)return;
+ if(!text){out.innerHTML='<div class="camresult"><p class="dim">No text detected in that image \u2014 try a clearer photo.</p></div>';return}
+ var words=norm(text).split(/[^a-z']+/).filter(function(w){return w.length>1&&!STOP.has(w)});
+ var uniq=[];words.forEach(function(w){if(uniq.indexOf(w)<0)uniq.push(w)});
+ var matches=[];uniq.slice(0,14).forEach(function(w){var r=searchList(w);if(r.length&&r[0].score>=90&&matches.indexOf(r[0].item)<0)matches.push(r[0].item)});
+ var h='<div class="camresult"><div class="ocrtext">\u201C'+esc(text.slice(0,300))+'\u201D</div>';
+ if(matches.length)h+='<div class="feed">'+matches.map(cardHTML).join('')+'</div>';
+ else h+='<p class="dim" style="font-size:13px">None of the detected words are in ZamDict yet.</p>';
+ out.innerHTML=h;bindImg();
+}
+function zambiaFlagSVG(){return '<svg viewBox="0 0 60 40" width="100%" height="100%" role="img" aria-label="Flag of Zambia"><rect width="60" height="40" fill="#198a00"/><rect x="38" y="22" width="6.6" height="18" fill="#de2010"/><rect x="44.6" y="22" width="6.6" height="18" fill="#000"/><rect x="51.2" y="22" width="6.8" height="18" fill="#f7a800"/><path d="M36 15c3-6 7-6 9-1 2-5 6-5 9 1-3-2-6-1-8 2l-1-2-1 2c-2-3-5-4-8-2Z" fill="#f7a800"/></svg>'}
+function maybeShowWelcome(){
+ if(Store.get('seenWelcome',false)===true)return;
+ var ov=document.createElement('div');ov.className='welcome-ov';ov.id='welcomeOv';
+ ov.innerHTML='<div class="flagbox">'+zambiaFlagSVG()+'</div><h1>Welcome to <span class="grad">ZamDict</span></h1><p>Zambia\u2019s living dictionary \u2014 English, Nyanja, Bemba, Chewa, Tonga, Lozi, Nsenga & Tumbuka in one place. Built in Zambia by World Of Discoveries.</p><button class="btn" style="margin-top:26px" data-action="open-welcome-done">'+icon('chev',18)+' Get started</button>';
+ document.body.appendChild(ov);
+}
+function openModal(html){$('#modal-root').innerHTML='<div class="modal-back" data-action="close-modal"><div class="modal" role="dialog" aria-modal="true" data-action="noop">'+html+'</div></div>';document.body.classList.add('no-scroll')}
+function closeModal(){$('#modal-root').innerHTML='';document.body.classList.remove('no-scroll')}
+function syncSearchUI(){var inp=$('#searchInput');inp.placeholder='Search galu, dog, ntchito\u2026';$('#clearBtn').hidden=!state.query;$('#searchIc').innerHTML=icon('search',20);
+ $('#controls').innerHTML='<button class="pill" data-action="open-categories">'+icon('grid',15)+'<span>Categories</span></button><button class="pill" data-action="open-camera">'+icon('camera',15)+'<span>Scan &amp; Translate</span><span class="beta-tag">BETA</span></button>'}
+var NAVTABS=[{v:'home',ic:'home',lb:'Home'},{v:'chat',ic:'sparkles',lb:AI_NAME},{v:'settings',ic:'gear',lb:'Settings'}];
+function syncNav(){$('#nav').innerHTML=NAVTABS.map(function(t){return '<button data-action="nav-tab" data-v="'+t.v+'"><span class="navic">'+icon(t.ic,21)+'</span><span>'+t.lb+'</span></button>'}).join('')}
+function pushRecent(q){if(Store.get('offlineOn',false)===true){var r=Store.get('recents',[]).filter(function(x){return x.toLowerCase()!==q.toLowerCase()});r.unshift(q);Store.set('recents',r.slice(0,10))}else{var s=state.sessionRecs||[];s=s.filter(function(x){return x.toLowerCase()!==q.toLowerCase()});s.unshift(q);state.sessionRecs=s.slice(0,10)}}
+var lastLoggedQ='';
+function logSearch(q){
+ if(Store.get('monitorOn',true)!==true)return;
+ var nq=norm(q);if(!nq||nq.length<2||nq===lastLoggedQ)return;lastLoggedQ=nq;
+ if(!isOnlineNow())return;
+ var n=searchList(q).length;
+ try{fetchJ('/searchlogs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({q:q.slice(0,80),n:n,ts:Date.now()})},6000).catch(function(){})}catch(e){}
+}
+function commitSearch(q){state.query=q;$('#searchInput').value=q;if(q.trim().length>=2){pushRecent(q);logSearch(q);goView('results')}else goHome()}
+document.addEventListener('focusin',function(e){if(e.target&&e.target.id==='searchInput'){setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'})},260)}});
+document.addEventListener('click',function(e){
+ var el=e.target.closest('[data-action]');if(!el)return;
+ var a=el.getAttribute('data-action');var id=el.getAttribute('data-id');
+ if(a==='go-home')goHome()
+ else if(a==='nav-tab'){var v=el.getAttribute('data-v');if(v===state.view)return;
+  if(v==='home')goHome();
+  else{var fromHome=(state.view==='home');viewStack=[{v:'home',id:null,cat:null}];state.view=v;if(v==='chat'){state.aiMode=true;syncSearchUI()}
+   try{if(fromHome)history.pushState({d:1},'');else history.replaceState({d:1},'')}catch(err){}
+   renderMain(true)}}
+ else if(a==='back')goBack()
+ else if(a==='to-top'){var sc=$('#aiscroll');if(sc){sc.scrollTo({top:0,behavior:'smooth'})}else window.scrollTo({top:0,behavior:'smooth'})}
+ else if(a==='retry-index'){ensureIndex(true)}
+ else if(a==='clear-query'){state.query='';$('#searchInput').value='';state.view='home';renderMain();syncSearchUI();$('#searchInput').focus()}
+ else if(a==='open-plus')openModal(plusHTML())
+ else if(a==='open-plus-prefill')openModal(plusHTML(el.getAttribute('data-q')||''))
+ else if(a==='open-categories')goView('categories')
+ else if(a==='open-cat'){state.catCur=el.getAttribute('data-c');goView('catlist')}
+ else if(a==='open-az'){goView('letter');$('#main').innerHTML=azHTML()}
+ else if(a==='close-modal')closeModal()
+ else if(a==='send-ai'){if(state.typing){stopAI();return}var ci=$('#chatInput');var q=(ci?ci.value:'').trim();if(!q)return;askAI(q)}
+ else if(a==='do-search')commitSearch(el.getAttribute('data-q'))
+ else if(a==='clear-recents'){if(Store.get('offlineOn',false)===true)Store.set('recents',[]);state.sessionRecs=[];renderMain()}
+ else if(a==='open-entry')goView('entry'),state.entryId=id,renderMain(true)
+ else if(a==='details'){var it=AL().find(function(x){return x.id===id})||Store.get('ocache',{})[id];if(it)openModal(detailsHTML(it))}
+ else if(a==='open-sources'){var mi=parseInt(el.getAttribute('data-i'),10);openModal(sourcesModalHTML(mi))}
+ else if(a==='letter'){state.letter=el.getAttribute('data-l');goView('letter')}
+ else if(a==='fav'){e.stopPropagation();var f=Store.get('favs',[]);var i=f.indexOf(id);if(i>=0)f.splice(i,1);else f.push(id);Store.set('favs',f);renderMain(true)}
+ else if(a==='copy'){e.stopPropagation();copyText(el.getAttribute('data-copy'))}
+ else if(a==='copy-ai'){var m=state.chat[+el.getAttribute('data-i')];if(m)copyText(stripDividers(m.raw||''))}
+ else if(a==='share-ai'){var m2=state.chat[+el.getAttribute('data-i')];if(m2)shareText(stripDividers(m2.raw||''))}
+ else if(a==='use-prompt')askAI(el.getAttribute('data-q'))
+ else if(a==='clear-chat'){saveSession();state.chat=[];state.chatDraft='';state.sessionId=null;state.sessionTitle=null;hideThinkDrawer();closeModal();renderMain();var ci2=$('#chatInput');if(ci2)ci2.focus()}
+ else if(a==='offline-toggle'){var on=Store.get('offlineOn',false)===true;Store.set('offlineOn',!on);toast(!on?'Offline Searches ON':'Offline Searches OFF','cloud');renderMain(true)}
+ else if(a==='offline-clear'){Store.set('ocache',{});Store.set('recents',[]);toast('Saved offline searches cleared','trash');renderMain(true)}
+ else if(a==='save-groq'){var v=($('#groqIn')?$('#groqIn').value.trim():'');if(v)Store.set('groqKey',v);else Store.del('groqKey');toast(v?'Groq API key saved in this browser':'AI key removed','sparkles');closeModal();syncSearchUI()}
+ else if(a==='clear-groq'){Store.del('groqKey');toast('AI key removed','sparkles');renderMain(true)}
+ else if(a==='save-console'){Store.set('consoleUrl',($('#consoleUrlIn')?$('#consoleUrlIn').value.trim():''));toast('Zam Console URL saved','console');renderMain(true)}
+ else if(a==='open-console'){var u=Store.get('consoleUrl','');if(u&&/^https?:\/\//.test(u))window.open(u,'_blank');else toast('Save your Zam Console URL first','info')}
+ else if(a==='check-updates'){if(!isOnlineNow()){toast('No Internet Connection \u00B7 cannot check updates','cloud');return}var beforeCount=AL().length;fetchJ('/meta/appVersion').then(function(v){ensureIndex(true).then(function(){var added=AL().length-beforeCount;var msg=(v&&v!==APP_VERSION)?('Update available: v'+v):('You are on the latest app version ('+APP_VERSION+')');if(added>0)msg+=' \u00B7 '+added+' new word'+(added===1?'':'s')+' downloaded';toast(msg,'refresh')})}).catch(function(){toast('Search Failed \u00B7 could not check updates','info')})}
+ else if(a==='report-bug'){location.href='mailto:'+BUG_EMAIL+'?subject=ZamDict%20Bug%20Report'}
+ else if(a==='social'){window.open(SOCIAL[el.getAttribute('data-s')],'_blank')}
+ else if(a==='api-create'){var key='zd_'+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,10);var rec={key:key,created:Date.now(),limit:50,usage:0,deep:true,status:'active'};var mk=Store.get('mykeys',[]);mk.unshift(rec);Store.set('mykeys',mk);
+  fetchJ('/apiKeys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)}).catch(function(){});
+  toast('API key created \u00B7 free trial 50 searches','key');openModal(apiModal())}
+ else if(a==='api-manage')openModal(apiModal())
+ else if(a==='api-run'){var q=($('#apiQ')||{}).value||'';var mk2=Store.get('mykeys',[]);var rec2=mk2[0];var out=$('#apiOut');
+  if(!rec2){out.textContent='Create an API key first.';return}
+  if(rec2.usage>=rec2.limit){out.textContent='Limit reached ('+rec2.limit+'). Free trial is for testing only.';return}
+  var res=searchList(q).slice(0,5);
+  rec2.usage+=1;Store.set('mykeys',mk2);
+  out.textContent=JSON.stringify({query:q,remaining:rec2.limit-rec2.usage,results:res.map(function(r){return{head:r.item.head,english:r.item.english,pos:r.item.pos,translations:r.item.trans,meaning:r.item.mean}})},null,1)}
+ else if(a==='set-theme'){Store.set('theme',el.getAttribute('data-val'));applyPrefs();renderMain(true)}
+ else if(a==='set-tsize'){Store.set('tsize',el.getAttribute('data-val'));applyPrefs();renderMain(true)}
+ else if(a==='set-font'){Store.set('font',el.getAttribute('data-val'));applyPrefs();renderMain(true)}
+ else if(a==='set-monitor'){var mv=el.getAttribute('data-val')==='on';Store.set('monitorOn',mv);toast(mv?'Search monitoring ON':'Search monitoring OFF','shield');renderMain(true)}
+ else if(a==='invite-friends'){var msg='Try ZamDict, a Zambian dictionary and translation app \ud83c\uddff\ud83c\uddf2 \u2014 English, Nyanja, Bemba, Chewa, Tonga, Lozi, Nsenga & Tumbuka, free and works offline.'+(Store.get('shareUrl','')?(' '+Store.get('shareUrl','')):'');if(navigator.share)navigator.share({title:'ZamDict',text:msg}).catch(function(){});else copyText(msg)}
+ else if(a==='share-app'){var msg2='ZamDict \u2014 Zambia\u2019s living dictionary. Search English, Nyanja, Bemba, Chewa, Tonga, Lozi, Nsenga & Tumbuka, free and offline-friendly.'+(Store.get('shareUrl','')?(' '+Store.get('shareUrl','')):'');shareText(msg2)}
+ else if(a==='save-shareurl'){Store.set('shareUrl',($('#shareUrlIn')?$('#shareUrlIn').value.trim():''));toast('Share link saved','check');renderMain(true)}
+ else if(a==='save-emailjs'){var cfg={serviceId:($('#ejsService')?$('#ejsService').value.trim():''),templateId:($('#ejsTemplate')?$('#ejsTemplate').value.trim():''),publicKey:($('#ejsKey')?$('#ejsKey').value.trim():'')};Store.set('emailjsCfg',cfg);toast('Email delivery saved','check');renderMain(true)}
+ else if(a==='open-feedback')openModal(feedbackHTML(null))
+ else if(a==='open-report')openModal(feedbackHTML(id))
+ else if(a==='send-feedback'){var ta=$('#fbText');var txt=(ta?ta.value:'').trim();if(!txt){toast('Write a message first','info');return}var wid=el.getAttribute('data-id')||'';sendFeedback(wid,txt)}
+ else if(a==='open-welcome-done'){Store.set('seenWelcome',true);var w=$('#welcomeOv');if(w)w.remove()}
+ else if(a==='open-camera'){openModal(cameraHTML());}
+ else if(a==='cam-pick'){var inp=el.getAttribute('data-kind')==='camera'?$('#camFileCamera'):$('#camFileUpload');if(inp)inp.click()}
+ else if(a==='chat-menu')openModal(historyHTML())
+ else if(a==='chat-tools')openModal(toolsHTML())
+ else if(a==='tool-toggle'){var tk=el.getAttribute('data-k'),tv=el.getAttribute('data-val')==='on';if(tk==='think')state.thinkMode=tv;else if(tk==='deep')state.deepSearch=tv;openModal(toolsHTML());renderMain(true)}
+ else if(a==='hist-load'){var sid=el.getAttribute('data-id');loadSession(sid);closeModal()}
+ else if(a==='hist-del'){e.stopPropagation();var s2=el.getAttribute('data-id');var all=Store.get('chatSessions',[]);var ix=all.findIndex(function(x){return String(x.id)===String(s2)});if(ix>=0){all.splice(ix,1);Store.set('chatSessions',all)}openModal(historyHTML())}
+});
+document.addEventListener('keydown',function(e){
+ if(e.key==='Escape')closeModal();
+ if(e.key==='Enter'&&e.target&&e.target.id==='chatInput'){e.preventDefault();if(state.typing){stopAI();return}var ci=$('#chatInput');var q=(ci?ci.value:'').trim();if(!q)return;askAI(q)}
+});
+$('#searchForm').addEventListener('submit',function(e){e.preventDefault();var q=$('#searchInput').value.trim();if(!q)return;commitSearch(q)});
+var deb;var logDeb;$('#searchInput').addEventListener('input',function(e){
+ var v=e.target.value;state.query=v;$('#clearBtn').hidden=!v;
+ clearTimeout(deb);
+ deb=setTimeout(function(){
+  if(state.view==='chat')return;
+  if(v.trim().length>=2){state.view='results'}else{state.view='home'}
+  renderMain(true);
+ },160);
+ clearTimeout(logDeb);
+ if(v.trim().length>=2)logDeb=setTimeout(function(){logSearch(v)},900);
+});
+document.addEventListener('submit',function(e){
+ if(e.target.id==='subForm'){
+  e.preventDefault();
+  if(!isOnlineNow()){toast('No Internet Connection \u00B7 submissions need internet','cloud');return}
+  var f=new FormData(e.target);var eng=(f.get('english')||'').trim();
+  var trans={english:eng};LANGS.forEach(function(l){if(l.key!=='english')trans[l.key]=((f.get('t_'+l.key)||'')+'').trim()});
+  var item={head:(f.get('head')||'').trim(),english:eng,pos:'phrase',meaning:(f.get('meaning')||'').trim(),trans:trans,examples:[],image:state.tempImage||null,author:'Community',date:Date.now(),status:'pending',kind:'new'};
+  fetchJ('/submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(item)}).then(function(){state.tempImage=false;closeModal();toast('Sent \u2014 waiting for your approval','shield')}).catch(function(){toast('Search Failed \u00B7 could not send submission','info')});
+ }
+});
+document.addEventListener('change',function(e){if(e.target.id==='imgIn'){var f=e.target.files[0];if(!f)return;if(f.size>1.5*1024*1024){toast('Image too large (max 1.5 MB)','info');e.target.value='';return}var r=new FileReader();r.onload=function(){state.tempImage=r.result;var p=$('#imgPrev');if(p)p.innerHTML='<div class="imgprev-wrap"><img class="imgprev" src="'+r.result+'" alt=""><span class="kb">'+Math.round(r.result.length*0.75/1024)+' KB base64</span></div>';toast('Image converted to base64','image')};r.readAsDataURL(f);e.target.value=''}
+ else if(e.target.id==='camFileCamera'||e.target.id==='camFileUpload'){var cf=e.target.files[0];if(!cf)return;runOCR(cf);e.target.value=''}
+});
+Promise.resolve().then(function(){
+ applyPrefs();
+ $('#plusBtn').innerHTML=icon('plus',22);$('#clearBtn').innerHTML=icon('x',16);
+ syncSearchUI();syncNav();
+ ensureIndex(false);
+ maybeShowWelcome();
+}).catch(function(err){handleErr(err&&err.message);ensureIndex(false);maybeShowWelcome()});
+</script>
+</body>
+</html>
